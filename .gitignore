@@ -1,0 +1,11 @@
+node_modules
+.next
+out
+dist
+.env
+.env*.local
+dev.db
+dev.db-journal
+*.log
+.npm-cache
+.tmp
