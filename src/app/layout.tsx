@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "PROXLIVE | Câmeras ao vivo",
-  description: "Câmeras ao vivo, mapa interativo e plataforma inteligente de vídeo."
+  title: "PROXLIVE",
+  description: "Câmeras ao vivo"
 };
 
 export default function RootLayout({
