@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "StudyPlanner AI",
-  description: "Cronogramas de estudos personalizados com IA real."
+  title: "PROXLIVE | Câmeras ao vivo",
+  description: "Câmeras ao vivo, mapa interativo e plataforma inteligente de vídeo."
 };
 
 export default function RootLayout({

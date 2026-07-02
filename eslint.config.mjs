@@ -6,9 +6,6 @@ export default defineConfig([
   ...nextCoreWebVitals,
   ...nextTypescript,
   {
-    rules: {
-      "react-hooks/set-state-in-effect": "off"
-    },
     ignores: [
       "node_modules/**",
       ".next/**",
