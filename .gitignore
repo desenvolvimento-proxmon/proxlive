@@ -2,9 +2,14 @@
 node_modules
 dist
 out
+
+# Cadastro das cameras: dado de execucao, vive na VPS
+server/data
+
 .env
 .env*.local
 .eslintcache
+tsconfig.tsbuildinfo
 .npm-cache
 npm-debug.log*
 yarn-debug.log*

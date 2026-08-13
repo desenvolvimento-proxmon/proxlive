@@ -31,7 +31,11 @@ export function Logo({
     }
 
     return (
-      <Link href={href} aria-label="Ir para Home" className="inline-flex">
+      <Link
+        href={href}
+        aria-label="Ir para Home"
+        className="proxlive-focus inline-flex rounded-md"
+      >
         {content}
       </Link>
     );

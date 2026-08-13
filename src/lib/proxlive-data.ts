@@ -7,6 +7,15 @@ export const socialLinks = {
   instagram: "https://www.instagram.com/proxmon_tec"
 };
 
+export const siteConfig = {
+  name: "PROXLIVE",
+  url: "https://proxlive.net.br",
+  description:
+    "Assista de graça às câmeras ao vivo do PROXLIVE e veja em tempo real o trânsito na Ponte da Amizade, entre Foz do Iguaçu e Ciudad del Este, antes de sair de casa.",
+  ogImage: "/images/cameras/cam1.png",
+  email: "atendimento@proxmon.com.br"
+};
+
 export type HeroSlide = {
   id: string;
   title: string;
@@ -24,14 +33,21 @@ export type Camera = {
   slug: string;
   name: string;
   location: string;
+  /** Cidade curta, usada em chips e filtros. */
+  city: string;
+  /** Categoria curta, usada em chips e filtros. */
+  category: string;
   description: string;
+  /** Resumo de uma linha para meta description e cards. */
+  summary: string;
   image: string;
   streamUrl?: string;
   latitude: number;
   longitude: number;
 };
 
-export type HorizontalAd = {
+/** Criativo de anúncio, comum aos formatos horizontal e lateral. */
+export type AdCreative = {
   id: string;
   title: string;
   image?: string;
@@ -39,17 +55,12 @@ export type HorizontalAd = {
   backgroundColor: string;
   textColor: string;
   link?: string;
+  /** Nome do anunciante, usado no relatório de impressões e cliques. */
+  advertiser?: string;
 };
 
-export type SideAd = {
-  id: string;
-  title: string;
-  image?: string;
-  logoText?: string;
-  backgroundColor: string;
-  textColor: string;
-  link?: string;
-};
+export type HorizontalAd = AdCreative;
+export type SideAd = AdCreative;
 
 export type SoftwareSection = {
   title: string;
@@ -62,11 +73,11 @@ export type SoftwareSection = {
 export const heroSlides: HeroSlide[] = [
   {
     id: "software-analitico-1",
-    title: "SOFTWARE DE ANALÍTICO DE VÍDEOS  COM IA",
+    title: "SOFTWARE DE ANALÍTICO DE VÍDEOS COM IA",
     subtitle:
       "Nosso software de analíticos de vídeo transforma um sistema de câmeras convencional em uma solução inteligente com IA.",
     image: "/images/hero/banners1.png",
-    buttonText: "Fale no whatsapp",
+    buttonText: "Fale no WhatsApp",
     buttonUrl: whatsappUrl,
     cornerLogoImage: "/images/brand/proxvision-logo.png",
     cornerLogoAlt: "PROXVISION"
@@ -74,18 +85,18 @@ export const heroSlides: HeroSlide[] = [
   {
     id: "software-analitico-2",
     title: "SISTEMA COMPLETO PARA GESTÃO CONDOMINIAL",
-    subtitle:
-      "Aplicativo para condomínios com mais de 30 funcionalidades",
+    subtitle: "Aplicativo para condomínios com mais de 30 funcionalidades.",
     image: "/images/hero/banners2.png",
-    buttonText: "Fale no whatsapp",
+    buttonText: "Fale no WhatsApp",
     buttonUrl: whatsappUrl,
     cornerLogoImage: "/images/brand/proxcond-logo.png",
     cornerLogoAlt: "PROXCOND"
   }
 ];
 
-const cameraDescription =
-  ".";
+const comingSoonDescription = `Estamos finalizando a instalação desta câmera e ela entra no ar em breve.
+
+Enquanto isso, acompanhe as câmeras que já estão transmitindo ao vivo. Quer sugerir um ponto ou disponibilizar a câmera do seu negócio no PROXLIVE? Fale com a gente pelo WhatsApp.`;
 
 export const cameras: Camera[] = [
   {
@@ -93,36 +104,50 @@ export const cameras: Camera[] = [
     slug: "ponte-amizade-brasil",
     name: "Ponte da Amizade - Brasil",
     location: "BR-277, Foz do Iguaçu - PR",
+    city: "Foz do Iguaçu",
+    category: "Trânsito",
+    summary:
+      "Veja ao vivo o trânsito na Ponte da Amizade no sentido Paraguai, saindo de Foz do Iguaçu.",
     description: `A Ponte Internacional da Amizade é um dos principais pontos de ligação entre o Brasil e o Paraguai, conectando Foz do Iguaçu/PR a Ciudad del Este.
-    
-                  Localizada sobre o Rio Paraná, a ponte é uma rota essencial para turistas, trabalhadores, comerciantes e moradores da região de fronteira.
 
-                  Por ser um ponto de grande movimento, o trânsito na ponte pode variar bastante ao longo do dia, principalmente em horários de pico, feriados e finais de semana. Acompanhe a câmera ao vivo da Ponte da Amizade no sentido Paraguai e veja em tempo real como está o fluxo de veículos antes de iniciar seu deslocamento até a fronteira.`,
+Localizada sobre o Rio Paraná, a ponte é uma rota essencial para turistas, trabalhadores, comerciantes e moradores da região de fronteira.
+
+Por ser um ponto de grande movimento, o trânsito na ponte pode variar bastante ao longo do dia, principalmente em horários de pico, feriados e finais de semana. Acompanhe a câmera ao vivo da Ponte da Amizade no sentido Paraguai e veja em tempo real como está o fluxo de veículos antes de iniciar seu deslocamento até a fronteira.`,
     image: "/images/cameras/cam1.png",
-    streamUrl: "https://video04.logicahost.com.br/portovelhomamore/fozpontedaamizadesentidoparaguai.stream/playlist.m3u8",
+    streamUrl:
+      "https://video04.logicahost.com.br/portovelhomamore/fozpontedaamizadesentidoparaguai.stream/playlist.m3u8",
     latitude: -25.509444,
     longitude: -54.598314
   },
-
   {
     id: "2",
     slug: "ponte-amizade-paraguai",
     name: "Ponte da Amizade - Paraguai",
     location: "PY02, Cd. del Este 100134, Paraguai",
-    description: `Acompanhe ao vivo a movimentação no lado paraguaio da Ponte Internacional da Amizade, em Ciudad del Este, na ligação com Foz do Iguaçu/PR. 
-    
-    A câmera mostra em tempo real o fluxo de veículos e pedestres que seguem em direção ao Brasil, ajudando turistas, trabalhadores e moradores da fronteira a verificarem as condições do trânsito antes de iniciar o deslocamento.`,
+    city: "Ciudad del Este",
+    category: "Trânsito",
+    summary:
+      "Acompanhe ao vivo o fluxo no lado paraguaio da Ponte da Amizade, no sentido Brasil.",
+    description: `Acompanhe ao vivo a movimentação no lado paraguaio da Ponte Internacional da Amizade, em Ciudad del Este, na ligação com Foz do Iguaçu/PR.
+
+A câmera mostra em tempo real o fluxo de veículos e pedestres que seguem em direção ao Brasil, ajudando turistas, trabalhadores e moradores da fronteira a verificarem as condições do trânsito antes de iniciar o deslocamento.`,
     image: "/images/cameras/cam2.png",
-    streamUrl: "https://video04.logicahost.com.br/portovelhomamore/fozpontedaamizadesentidobrasil.stream/chunklist_w937410344.m3u8",
+    // Sempre apontar para o playlist mestre: o chunklist carrega um id de
+    // sessao que muda quando o encoder reinicia e quebraria o player.
+    streamUrl:
+      "https://video04.logicahost.com.br/portovelhomamore/fozpontedaamizadesentidobrasil.stream/playlist.m3u8",
     latitude: -25.509334,
     longitude: -54.606988
   },
   {
     id: "3",
-    slug: "camera-indisponivel-1",
-    name: "Camera indisponivel",
+    slug: "camera-em-breve-1",
+    name: "Nova câmera a caminho",
     location: "Em breve",
-    description: cameraDescription,
+    city: "Em breve",
+    category: "Em breve",
+    summary: "Mais um ponto ao vivo entra no ar em breve no PROXLIVE.",
+    description: comingSoonDescription,
     image: "/images/cameras/indisponivel.png",
     streamUrl: "",
     latitude: -27.1082,
@@ -130,10 +155,13 @@ export const cameras: Camera[] = [
   },
   {
     id: "4",
-    slug: "camera-indisponivel-2",
-    name: "Camera indisponivel",
+    slug: "camera-em-breve-2",
+    name: "Nova câmera a caminho",
     location: "Em breve",
-    description: cameraDescription,
+    city: "Em breve",
+    category: "Em breve",
+    summary: "Mais um ponto ao vivo entra no ar em breve no PROXLIVE.",
+    description: comingSoonDescription,
     image: "/images/cameras/indisponivel.png",
     streamUrl: "",
     latitude: -25.509444,
@@ -141,25 +169,27 @@ export const cameras: Camera[] = [
   }
 ];
 
-export const horizontalAds: HorizontalAd[] = [
+export const horizontalAds: AdCreative[] = [
   {
     id: "mhnet",
-    title: "Propaganda MHnet",
+    title: "MHnet Telecom",
     image: "/images/ads/banner-mhnet.png",
     backgroundColor: PRIMARY_BLUE,
     textColor: "#ffffff",
-    link: "https://mhnet.com.br"
+    link: "https://mhnet.com.br",
+    advertiser: "MHnet"
   }
 ];
 
-export const sideAds: SideAd[] = [
+export const sideAds: AdCreative[] = [
   {
     id: "eletros",
     title: "Assinatura de câmeras",
     image: "/images/ads/side-ad-1.png",
     backgroundColor: "#051f44",
     textColor: "#ffffff",
-    link: "https://www.eletrosdigitalsolutec.com.br/security"
+    link: "https://www.eletrosdigitalsolutec.com.br/security",
+    advertiser: "Eletros Digital"
   },
   {
     id: "turquesa",
@@ -167,7 +197,8 @@ export const sideAds: SideAd[] = [
     image: "/images/ads/side-ad-2.png",
     backgroundColor: "#2b90a4",
     textColor: "#ffffff",
-    link: "https://www.eletrosdigitalsolutec.com.br/security"
+    link: "https://www.eletrosdigitalsolutec.com.br/security",
+    advertiser: "Eletros Digital"
   },
   {
     id: "vermelha",
@@ -175,36 +206,65 @@ export const sideAds: SideAd[] = [
     image: "/images/ads/side-ad-3.png",
     backgroundColor: "#ff3131",
     textColor: "#ffffff",
-    link: "https://www.proxmon.com.br/proxparking"
+    link: "https://www.proxmon.com.br/proxparking",
+    advertiser: "PROXMON"
   }
 ];
 
-export const cameraDetailHorizontalAd: HorizontalAd = {
+export const cameraDetailHorizontalAd: AdCreative = {
   id: "camera-detail-mhnet",
-  title: "Propaganda MHnet",
+  title: "MHnet Telecom",
   image: "/images/ads/banner-mhnet.png",
   backgroundColor: PRIMARY_BLUE,
   textColor: "#ffffff",
-  link: "https://mhnet.com.br"
+  link: "https://mhnet.com.br",
+  advertiser: "MHnet"
 };
 
-export const cameraDetailSideAd: SideAd = {
-  id: "camera-detail-side",
-  title: "Anuncio detalhe",
-  image: "/images/ads/side-ad-4.png",
-  backgroundColor: "#051f44",
-  textColor: "#ffffff"
-};
+/** Coluna lateral da página de câmera, ao lado da descrição. */
+export const cameraDetailSideAds: AdCreative[] = [
+  {
+    id: "camera-detail-side",
+    title: "Eletros Digital Security",
+    image: "/images/ads/side-ad-4.png",
+    backgroundColor: "#051f44",
+    textColor: "#ffffff",
+    link: "https://www.eletrosdigitalsolutec.com.br/security",
+    advertiser: "Eletros Digital"
+  },
+  {
+    id: "camera-detail-side-2",
+    title: "PROX Parking",
+    image: "/images/ads/side-ad-3.png",
+    backgroundColor: "#ff3131",
+    textColor: "#ffffff",
+    link: "https://www.proxmon.com.br/proxparking",
+    advertiser: "PROXMON"
+  }
+];
 
 export const softwareSection: SoftwareSection = {
   title: "PLATAFORMA WEB E APP",
   description:
     "Uma plataforma completa pensada para facilitar a vida de todos os usuários.",
   image: "/images/software/platform-mockup.png",
-  buttonText: "Fale no whatsapp",
+  buttonText: "Fale no WhatsApp",
   buttonUrl: whatsappUrl
 };
 
 export function getCameraBySlug(slug: string) {
   return cameras.find((camera) => camera.slug === slug);
+}
+
+export function isLive(camera: Camera) {
+  return Boolean(camera.streamUrl?.trim());
+}
+
+export function getLiveCameras() {
+  return cameras.filter(isLive);
+}
+
+/** Câmera destacada no topo da Home. */
+export function getFeaturedCamera() {
+  return getLiveCameras()[0] ?? cameras[0];
 }

@@ -2,7 +2,12 @@
 
 import { useEffect, useRef, useState } from "react";
 import type { Camera } from "@/lib/proxlive-data";
-import { isHlsUrl, loadHls, type HlsInstance } from "./hls-client";
+import {
+  isHlsUrl,
+  loadHls,
+  PREVIEW_HLS_SETTINGS,
+  type HlsInstance
+} from "./hls-client";
 
 type CameraMapProps = {
   cameras: Camera[];
@@ -16,6 +21,7 @@ type LeafletPopupEvent = {
 
 type LeafletMap = {
   remove: () => void;
+  invalidateSize: () => void;
   fitBounds: (bounds: unknown, options?: { padding?: [number, number] }) => void;
   setView: (center: [number, number], zoom: number) => LeafletMap;
   on: (
@@ -47,6 +53,7 @@ type LeafletNamespace = {
     options?: Record<string, unknown>
   ) => LeafletMarker;
   icon: (options: Record<string, unknown>) => unknown;
+  divIcon: (options: Record<string, unknown>) => unknown;
   latLngBounds: (coordinates: [number, number][]) => unknown;
 };
 
@@ -80,12 +87,21 @@ function buildPopup(camera: Camera) {
     ? `<video data-stream-url="${streamUrl}" poster="${image}" muted autoplay playsinline preload="auto" crossorigin="anonymous" style="display:block;width:100%;height:145px;object-fit:cover;background:#000;border-radius:10px;"></video>`
     : `<img src="${image}" alt="${name}" style="display:block;width:100%;height:145px;object-fit:cover;border-radius:10px;" />`;
 
+  const liveBadge = hasHls
+    ? `<span style="position:absolute;left:8px;top:8px;display:inline-flex;align-items:center;gap:5px;background:#ff3b30;color:#fff;padding:3px 8px;border-radius:999px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;">
+         <span style="width:5px;height:5px;border-radius:999px;background:#fff;"></span>Ao vivo
+       </span>`
+    : "";
+
   return `
     <div style="width:260px;">
-      ${preview}
-      <strong style="display:block;margin-top:12px;font-size:16px;line-height:1.2;color:#111827;">${name}</strong>
-      <p style="margin:6px 0 12px;color:#525252;font-size:12px;line-height:1.35;">${location}</p>
-      <a href="${cameraUrl}" style="display:inline-block;background:#0072ff;color:#fff;padding:9px 13px;border-radius:8px;text-decoration:none;font-weight:700;font-size:13px;">Ver camera</a>
+      <div style="position:relative;">
+        ${preview}
+        ${liveBadge}
+      </div>
+      <strong style="display:block;margin-top:12px;font-size:14px;font-weight:600;line-height:1.3;letter-spacing:-0.012em;color:#131c2e;">${name}</strong>
+      <p style="margin:4px 0 12px;color:#65728d;font-size:11.5px;line-height:1.4;">${location}</p>
+      <a href="${cameraUrl}" style="display:block;text-align:center;background:#0072ff;color:#fff;padding:9px 13px;border-radius:8px;text-decoration:none;font-weight:600;font-size:12.5px;">Assistir ao vivo</a>
     </div>
   `;
 }
@@ -148,6 +164,7 @@ export function CameraMap({ cameras }: CameraMapProps) {
     let map: LeafletMap | null = null;
     let cancelled = false;
     let popupHlsInstances: HlsInstance[] = [];
+    let resizeObserver: ResizeObserver | null = null;
 
     function destroyPopupStreams() {
       popupHlsInstances.forEach((hls) => hls.destroy());
@@ -184,7 +201,7 @@ export function CameraMap({ cameras }: CameraMapProps) {
               return;
             }
 
-            const hls = new Hls();
+            const hls = new Hls(PREVIEW_HLS_SETTINGS);
             popupHlsInstances.push(hls);
             hls.loadSource(streamUrl);
             hls.attachMedia(video);
@@ -234,20 +251,40 @@ export function CameraMap({ cameras }: CameraMapProps) {
         map.on("popupopen", handlePopupOpen);
         map.on("popupclose", handlePopupClose);
 
-        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-          attribution: "&copy; OpenStreetMap"
-        }).addTo(map);
+        // O mapa acompanha a altura da coluna de anuncios, que muda quando as
+        // imagens carregam. Sem avisar o Leaflet, ele mantem o tamanho antigo
+        // e deixa faixas cinza onde faltam tiles.
+        resizeObserver = new ResizeObserver(() => map?.invalidateSize());
+        resizeObserver.observe(mapElementRef.current);
 
-        const icon = L.icon({
-          iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
-          iconRetinaUrl:
-            "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png",
-          shadowUrl:
-            "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
-          iconSize: [25, 41],
-          iconAnchor: [12, 41],
-          popupAnchor: [1, -34],
-          shadowSize: [41, 41]
+        // Base colorida. Para voltar ao OSM padrao, troque a URL por
+        // "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" e remova `subdomains`.
+        L.tileLayer(
+          "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
+          {
+            attribution: "&copy; OpenStreetMap &copy; CARTO",
+            subdomains: "abcd",
+            maxZoom: 20
+          }
+        ).addTo(map);
+
+        // Marcador proprio no lugar do pin padrao do Leaflet.
+        const icon = L.divIcon({
+          className: "proxlive-marker",
+          html: `
+            <span class="proxlive-marker__pulse"></span>
+            <span class="proxlive-marker__dot">
+              <svg viewBox="0 0 24 24" width="13" height="13" fill="none"
+                   stroke="currentColor" stroke-width="2.2"
+                   stroke-linecap="round" stroke-linejoin="round">
+                <path d="m22 8-6 4 6 4V8Z"/>
+                <rect width="14" height="12" x="2" y="6" rx="2"/>
+              </svg>
+            </span>
+          `,
+          iconSize: [34, 34],
+          iconAnchor: [17, 17],
+          popupAnchor: [0, -16]
         });
 
         const markers = new Map<string, LeafletMarker>();
@@ -282,6 +319,7 @@ export function CameraMap({ cameras }: CameraMapProps) {
     return () => {
       cancelled = true;
       destroyPopupStreams();
+      resizeObserver?.disconnect();
 
       if (map) {
         map.off("popupopen", handlePopupOpen);
@@ -292,11 +330,11 @@ export function CameraMap({ cameras }: CameraMapProps) {
   }, [cameras]);
 
   return (
-    <div className="relative min-h-[350px] overflow-hidden rounded-lg bg-neutral-100 shadow-sm lg:min-h-[500px]">
+    <div className="relative h-full min-h-[360px] overflow-hidden rounded-2xl border border-ink-100 bg-ink-50 shadow-e1 lg:min-h-[500px]">
       <div ref={mapElementRef} className="absolute inset-0" />
       {failed ? (
-        <div className="absolute inset-0 flex items-center justify-center p-6 text-center text-sm font-medium text-neutral-600">
-          Nao foi possivel carregar o mapa interativo agora.
+        <div className="absolute inset-0 flex items-center justify-center p-6 text-center text-sm text-ink-500">
+          Não foi possível carregar o mapa interativo agora.
         </div>
       ) : null}
     </div>

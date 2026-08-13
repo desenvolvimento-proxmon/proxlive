@@ -12,7 +12,10 @@ export default defineConfig([
       "out/**",
       "dist/**",
       ".npm-cache/**",
-      ".tmp/**"
+      ".tmp/**",
+      // API da VPS: projeto Node separado, em CommonJS.
+      // As regras do Next não se aplicam a ele.
+      "server/**"
     ]
   }
 ]);

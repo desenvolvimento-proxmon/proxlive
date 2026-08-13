@@ -4,6 +4,8 @@
 
 :root {
   color-scheme: light;
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 * {
@@ -12,14 +14,19 @@
 
 html {
   scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
   min-height: 100vh;
   background: #ffffff;
-  color: #111827;
-  font-family:
-    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: theme("colors.ink.800");
+  font-family: var(--font-inter), ui-sans-serif, system-ui, -apple-system,
+    BlinkMacSystemFont, "Segoe UI", sans-serif;
+  /* Alternativas de desenho do Inter: "1" de haste reta e "a" mais aberto. */
+  font-feature-settings: "cv11", "ss01";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 a {
@@ -35,21 +42,247 @@ select {
 }
 
 ::selection {
-  background: rgba(0, 114, 255, 0.18);
+  background: rgba(0, 114, 255, 0.16);
 }
 
 @layer components {
   .proxlive-container {
-    @apply mx-auto w-full max-w-[1240px] px-5 sm:px-8 lg:px-10;
+    @apply mx-auto w-full max-w-[1200px] px-5 sm:px-8 lg:px-10;
   }
 
-  .proxlive-button {
-    @apply inline-flex items-center justify-center gap-2 rounded-lg px-5 py-3 text-sm font-semibold transition focus:outline-none focus:ring-4 focus:ring-blue-100;
+  /* ---- Botões -------------------------------------------------------- */
+  /* Um único sistema. Antes cada botão tinha altura e corpo de letra próprios. */
+
+  .btn {
+    @apply relative inline-flex shrink-0 items-center justify-center gap-2
+      whitespace-nowrap rounded-lg font-semibold
+      transition-[background-color,box-shadow,transform,color,border-color]
+      duration-200 ease-out-quint
+      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2
+      active:translate-y-px;
+  }
+
+  .btn-sm {
+    @apply h-9 px-3.5 text-[13px];
+  }
+
+  .btn-md {
+    @apply h-11 px-5 text-sm;
+  }
+
+  .btn-primary {
+    @apply bg-brand-500 text-white shadow-e2
+      hover:bg-brand-600 hover:shadow-e3-brand
+      focus-visible:ring-brand-500 focus-visible:ring-offset-white;
+  }
+
+  .btn-secondary {
+    @apply border border-ink-200 bg-white text-ink-700 shadow-e1
+      hover:border-ink-300 hover:bg-ink-50 hover:text-ink-900 hover:shadow-e2
+      focus-visible:ring-brand-500 focus-visible:ring-offset-white;
+  }
+
+  /* Sobre superfície escura ou fotografia. */
+  .btn-on-dark {
+    @apply border border-white/25 bg-white/10 text-white backdrop-blur-md
+      hover:border-white/40 hover:bg-white/20
+      focus-visible:ring-white focus-visible:ring-offset-ink-950;
+  }
+
+  .btn-on-dark-solid {
+    @apply bg-white text-ink-900 shadow-e2
+      hover:bg-ink-50 hover:shadow-e3
+      focus-visible:ring-white focus-visible:ring-offset-ink-950;
+  }
+
+  /* ---- Superfícies --------------------------------------------------- */
+
+  .surface-dark {
+    @apply bg-ink-950 text-white;
+  }
+
+  /*
+   * Medida de leitura. O `ch` mede o glifo "0", mais largo que a média das
+   * minúsculas, então 62ch cai por volta de 70 caracteres reais por linha —
+   * dentro da faixa confortável de 45–75.
+   */
+  .prose-measure {
+    @apply max-w-[62ch] text-[0.9375rem] leading-[1.75] text-ink-600;
+  }
+
+  .hairline {
+    @apply border-ink-100;
   }
 }
+
+@layer utilities {
+  .proxlive-focus {
+    @apply focus-visible:outline-none focus-visible:ring-2
+      focus-visible:ring-brand-500 focus-visible:ring-offset-2
+      focus-visible:ring-offset-white;
+  }
+
+  .proxlive-focus-dark {
+    @apply focus-visible:outline-none focus-visible:ring-2
+      focus-visible:ring-white/80 focus-visible:ring-offset-2
+      focus-visible:ring-offset-ink-950;
+  }
+}
+
+/* ---- Revelação no scroll --------------------------------------------- */
+/* Só opacidade e transform: ambos compostos na GPU, sem custo de layout. */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity 0.7s var(--ease-out-expo),
+    transform 0.7s var(--ease-out-expo);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+  will-change: auto;
+}
+
+/*
+ * Rede de segurança: sem JS o conteúdo nunca pode ficar invisível.
+ * O script marca <html> assim que carrega; até lá, `.reveal` fica visível.
+ */
+html:not(.js) .reveal {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  /* Precisa vencer o estado inicial de `.reveal`, não só zerar a transição. */
+  .reveal,
+  .reveal.is-visible {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/*
+ * Usado via `style` no indicador do carrossel. O Tailwind só emite os
+ * keyframes do tema quando existe uma classe `animate-*` correspondente,
+ * então este precisa ser declarado aqui.
+ */
+@keyframes slide-progress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* ---- Mapa ------------------------------------------------------------- */
 
 .leaflet-container {
   z-index: 0;
   min-height: 100%;
   font: inherit;
+  background: theme("colors.ink.100");
+}
+
+.leaflet-popup-content-wrapper {
+  border-radius: 14px;
+  padding: 6px;
+  box-shadow:
+    0 4px 8px -2px rgba(10, 17, 32, 0.08),
+    0 24px 48px -20px rgba(10, 17, 32, 0.35);
+}
+
+.leaflet-popup-content {
+  margin: 8px;
+}
+
+.leaflet-popup-tip {
+  box-shadow: none;
+}
+
+.leaflet-control-attribution {
+  font-size: 10px;
+  background: rgba(255, 255, 255, 0.78) !important;
+  backdrop-filter: blur(4px);
+  color: theme("colors.ink.500");
+}
+
+/* O azul padrão do Leaflet (#0078A8) fica em 3.6:1 — abaixo de AA. */
+.leaflet-control-attribution a {
+  color: theme("colors.brand.700") !important;
+}
+
+.leaflet-bar a {
+  color: theme("colors.ink.700") !important;
+  border-bottom-color: theme("colors.ink.200") !important;
+}
+
+/* Marcador das câmeras, com pulso indicando transmissão ao vivo. */
+.proxlive-marker {
+  display: grid;
+  place-items: center;
+  background: transparent;
+  border: 0;
+}
+
+.proxlive-marker__dot,
+.proxlive-marker__pulse {
+  grid-area: 1 / 1;
+}
+
+.proxlive-marker__dot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  background: #0072ff;
+  color: #ffffff;
+  border: 2.5px solid #ffffff;
+  box-shadow: 0 6px 16px -4px rgba(0, 114, 255, 0.75);
+  transition: transform 0.25s var(--ease-out-quint);
+}
+
+.proxlive-marker:hover .proxlive-marker__dot {
+  transform: scale(1.12);
+}
+
+.proxlive-marker__pulse {
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  background: rgba(0, 114, 255, 0.5);
+  animation: proxlive-marker-pulse 2.4s ease-out infinite;
+}
+
+@keyframes proxlive-marker-pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.65;
+  }
+  70%,
+  100% {
+    transform: scale(2.2);
+    opacity: 0;
+  }
 }

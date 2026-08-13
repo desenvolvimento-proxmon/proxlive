@@ -6,9 +6,15 @@ import { Navbar } from "@/components/proxlive/Navbar";
 import {
   cameras,
   cameraDetailHorizontalAd,
-  cameraDetailSideAd,
+  cameraDetailSideAds,
   getCameraBySlug,
+  isLive
 } from "@/lib/proxlive-data";
+import {
+  JsonLd,
+  breadcrumbSchema,
+  liveCameraSchema
+} from "@/lib/structured-data";
 
 type CameraPageProps = {
   params: Promise<{
@@ -30,13 +36,41 @@ export async function generateMetadata({
 
   if (!camera) {
     return {
-      title: "Câmera não encontrada | PROXLIVE"
+      title: "Câmera não encontrada"
     };
   }
 
+  // Título pensado para a busca real: "câmera ao vivo <lugar>".
+  const title = `${camera.name} — câmera ao vivo`;
+  const description = `${camera.summary} Transmissão ao vivo e gratuita, direto de ${camera.location}.`;
+  const path = `/camera/${camera.slug}/`;
+
   return {
-    title: `${camera.name} | PROXLIVE`,
-    description: camera.description
+    title,
+    description,
+    alternates: { canonical: path },
+    openGraph: {
+      type: "video.other",
+      url: path,
+      title: `${title} | PROXLIVE`,
+      description,
+      images: [
+        {
+          url: camera.image,
+          // Dimensão real do arquivo. Declarar valor errado faz o WhatsApp e o
+          // Facebook montarem o preview com o enquadramento trocado.
+          width: 800,
+          height: 600,
+          alt: `Câmera ao vivo em ${camera.location}`
+        }
+      ]
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${title} | PROXLIVE`,
+      description,
+      images: [camera.image]
+    }
   };
 }
 
@@ -50,14 +84,16 @@ export default async function CameraPage({ params }: CameraPageProps) {
 
   return (
     <>
+      {isLive(camera) ? <JsonLd data={liveCameraSchema(camera)} /> : null}
+      <JsonLd data={breadcrumbSchema(camera)} />
       <Navbar />
       <CameraDetail
         camera={camera}
         cameras={cameras}
         horizontalAd={cameraDetailHorizontalAd}
-        sideAd={cameraDetailSideAd}
+        sideAds={cameraDetailSideAds}
       />
-      <Footer variant="blue" />
+      <Footer />
     </>
   );
 }
