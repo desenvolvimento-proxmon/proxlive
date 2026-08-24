@@ -9,7 +9,7 @@ export const socialLinks = {
 
 export const siteConfig = {
   name: "PROXLIVE",
-  url: "https://proxlive.net.br",
+  url: "https://proxlive.com.br",
   description:
     "Assista de graça às câmeras ao vivo do PROXLIVE e veja em tempo real o trânsito na Ponte da Amizade, entre Foz do Iguaçu e Ciudad del Este, antes de sair de casa.",
   ogImage: "/images/cameras/cam1.png",

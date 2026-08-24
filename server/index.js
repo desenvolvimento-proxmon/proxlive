@@ -23,7 +23,7 @@ const ADMIN_USER = process.env.ADMIN_USER || "admin";
 const ADMIN_PASSWORD_HASH = process.env.ADMIN_PASSWORD_HASH || "";
 const JWT_SECRET = process.env.JWT_SECRET || "";
 const MEDIAMTX_API = process.env.MEDIAMTX_API || "http://127.0.0.1:9997";
-const SITE_ORIGIN = process.env.SITE_ORIGIN || "https://proxlive.net.br";
+const SITE_ORIGIN = process.env.SITE_ORIGIN || "https://proxlive.com.br";
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN || "";
 const GITHUB_REPO = process.env.GITHUB_REPO || "";
 const DATA_FILE = process.env.DATA_FILE || path.join(__dirname, "data", "cameras.json");
@@ -257,7 +257,7 @@ app.post("/api/cameras", exigirToken, async (req, res) => {
     longitude: Number(c.longitude),
     tipo: c.tipo,
     sourceUrl: c.tipo === "rtsp" ? c.sourceUrl : "",
-    streamUrl: `https://stream.proxlive.net.br/${c.slug}/index.m3u8`,
+    streamUrl: `https://stream.proxlive.com.br/${c.slug}/index.m3u8`,
     criadaEm: new Date().toISOString()
   };
 
@@ -272,7 +272,7 @@ app.post("/api/cameras", exigirToken, async (req, res) => {
     // Para câmeras RTMP, o painel mostra isso para configurar no equipamento.
     publishUrl:
       c.tipo === "rtmp"
-        ? `rtmp://stream.proxlive.net.br:1935/${c.slug}?user=publisher&pass=SENHA_DE_PUBLICACAO`
+        ? `rtmp://stream.proxlive.com.br:1935/${c.slug}?user=publisher&pass=SENHA_DE_PUBLICACAO`
         : null
   });
 });

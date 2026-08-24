@@ -50,7 +50,7 @@ systemctl daemon-reload && systemctl enable --now proxlive-api && systemctl stat
 ```
 
 **5. Publicar no Nginx.** Dentro do `server { listen 443 ... }` de
-`stream.proxlive.net.br`, antes do `location /` que aponta ao MediaMTX:
+`stream.proxlive.com.br`, antes do `location /` que aponta ao MediaMTX:
 
 ```nginx
 location /api/ {
@@ -72,7 +72,7 @@ nginx -t && systemctl reload nginx
 **6. Testar:**
 
 ```
-curl https://stream.proxlive.net.br/api/saude
+curl https://stream.proxlive.com.br/api/saude
 ```
 
 Deve responder `{"ok":true}`.
