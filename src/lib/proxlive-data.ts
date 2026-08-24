@@ -141,15 +141,17 @@ A câmera mostra em tempo real o fluxo de veículos e pedestres que seguem em di
   },
   {
     id: "3",
-    slug: "camera-em-breve-1",
-    name: "Nova câmera a caminho",
-    location: "Em breve",
-    city: "Em breve",
-    category: "Em breve",
-    summary: "Mais um ponto ao vivo entra no ar em breve no PROXLIVE.",
-    description: comingSoonDescription,
+    slug: "drone",
+    name: "Drone",
+    location: "Chapecó - SC",
+    city: "Chapecó",
+    category: "Drone",
+    summary: "Imagem aérea ao vivo transmitida por drone.",
+    description: `Transmissão aérea ao vivo enviada por drone.
+
+O sinal chega ao PROXLIVE em tempo real, direto do equipamento em voo.`,
     image: "/images/cameras/indisponivel.png",
-    streamUrl: "",
+    streamUrl: "https://stream.proxlive.com.br/drone/index.m3u8",
     latitude: -27.1082,
     longitude: -52.6069
   },
