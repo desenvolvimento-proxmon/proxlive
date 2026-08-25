@@ -142,8 +142,8 @@ A câmera mostra em tempo real o fluxo de veículos e pedestres que seguem em di
   {
     id: "3",
     slug: "drone",
-    name: "Drone",
-    location: "Chapecó - SC",
+    name: "Autódromo Drone",
+    location: "Autódromo de Chapecó - SC",
     city: "Chapecó",
     category: "Drone",
     summary: "Imagem aérea ao vivo transmitida por drone.",
