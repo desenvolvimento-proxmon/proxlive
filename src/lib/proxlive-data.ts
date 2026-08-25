@@ -94,9 +94,6 @@ export const heroSlides: HeroSlide[] = [
   }
 ];
 
-const comingSoonDescription = `Estamos finalizando a instalação desta câmera e ela entra no ar em breve.
-
-Enquanto isso, acompanhe as câmeras que já estão transmitindo ao vivo. Quer sugerir um ponto ou disponibilizar a câmera do seu negócio no PROXLIVE? Fale com a gente pelo WhatsApp.`;
 
 export const cameras: Camera[] = [
   {
@@ -157,17 +154,35 @@ O sinal chega ao PROXLIVE em tempo real, direto do equipamento em voo.`,
   },
   {
     id: "4",
-    slug: "camera-em-breve-2",
-    name: "Nova câmera a caminho",
-    location: "Em breve",
-    city: "Em breve",
-    category: "Em breve",
-    summary: "Mais um ponto ao vivo entra no ar em breve no PROXLIVE.",
-    description: comingSoonDescription,
+    slug: "autodromo-ptz",
+    name: "Autódromo PTZ",
+    location: "Autódromo de Chapecó - SC",
+    city: "Chapecó",
+    category: "Autódromo",
+    summary: "Lente móvel do autódromo de Chapecó, ao vivo.",
+    description: `Câmera com lente móvel instalada no Autódromo de Chapecó.
+
+Acompanhe ao vivo a movimentação na pista.`,
     image: "/images/cameras/indisponivel.png",
-    streamUrl: "",
-    latitude: -25.509444,
-    longitude: -54.598314
+    streamUrl: "https://stream.proxlive.com.br/autodromo-fixa/index.m3u8",
+    latitude: -27.1082,
+    longitude: -52.6069
+  },
+  {
+    id: "5",
+    slug: "autodromo-panoramica",
+    name: "Autódromo Panorâmica",
+    location: "Autódromo de Chapecó - SC",
+    city: "Chapecó",
+    category: "Autódromo",
+    summary: "Visão panorâmica do autódromo de Chapecó, ao vivo.",
+    description: `Câmera panorâmica instalada no Autódromo de Chapecó.
+
+A lente grande-angular cobre uma faixa ampla da pista num único enquadramento.`,
+    image: "/images/cameras/indisponivel.png",
+    streamUrl: "https://stream.proxlive.com.br/autodromo-pano/index.m3u8",
+    latitude: -27.1082,
+    longitude: -52.6069
   }
 ];
 
