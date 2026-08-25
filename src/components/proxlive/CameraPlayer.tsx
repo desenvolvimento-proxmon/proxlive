@@ -130,7 +130,6 @@ export function CameraPlayer({ camera, className = "" }: CameraPlayerProps) {
       <video
         ref={videoRef}
         className="h-full w-full bg-ink-950 object-contain"
-        crossOrigin="anonymous"
         muted
         playsInline
         autoPlay
