@@ -12,7 +12,7 @@ export const siteConfig = {
   url: "https://proxlive.com.br",
   description:
     "Assista de graça às câmeras ao vivo do PROXLIVE e veja em tempo real o trânsito na Ponte da Amizade, entre Foz do Iguaçu e Ciudad del Este, antes de sair de casa.",
-  ogImage: "/images/cameras/cam1.png",
+  ogImage: "https://stream.proxlive.com.br/thumbs/autodromo-pano.jpg",
   email: "atendimento@proxmon.com.br"
 };
 
@@ -98,46 +98,6 @@ export const heroSlides: HeroSlide[] = [
 export const cameras: Camera[] = [
   {
     id: "1",
-    slug: "ponte-amizade-brasil",
-    name: "Ponte da Amizade - Brasil",
-    location: "BR-277, Foz do Iguaçu - PR",
-    city: "Foz do Iguaçu",
-    category: "Trânsito",
-    summary:
-      "Veja ao vivo o trânsito na Ponte da Amizade no sentido Paraguai, saindo de Foz do Iguaçu.",
-    description: `A Ponte Internacional da Amizade é um dos principais pontos de ligação entre o Brasil e o Paraguai, conectando Foz do Iguaçu/PR a Ciudad del Este.
-
-Localizada sobre o Rio Paraná, a ponte é uma rota essencial para turistas, trabalhadores, comerciantes e moradores da região de fronteira.
-
-Por ser um ponto de grande movimento, o trânsito na ponte pode variar bastante ao longo do dia, principalmente em horários de pico, feriados e finais de semana. Acompanhe a câmera ao vivo da Ponte da Amizade no sentido Paraguai e veja em tempo real como está o fluxo de veículos antes de iniciar seu deslocamento até a fronteira.`,
-    image: "/images/cameras/cam1.png",
-    streamUrl:
-      "https://video04.logicahost.com.br/portovelhomamore/fozpontedaamizadesentidoparaguai.stream/playlist.m3u8",
-    latitude: -25.509444,
-    longitude: -54.598314
-  },
-  {
-    id: "2",
-    slug: "ponte-amizade-paraguai",
-    name: "Ponte da Amizade - Paraguai",
-    location: "PY02, Cd. del Este 100134, Paraguai",
-    city: "Ciudad del Este",
-    category: "Trânsito",
-    summary:
-      "Acompanhe ao vivo o fluxo no lado paraguaio da Ponte da Amizade, no sentido Brasil.",
-    description: `Acompanhe ao vivo a movimentação no lado paraguaio da Ponte Internacional da Amizade, em Ciudad del Este, na ligação com Foz do Iguaçu/PR.
-
-A câmera mostra em tempo real o fluxo de veículos e pedestres que seguem em direção ao Brasil, ajudando turistas, trabalhadores e moradores da fronteira a verificarem as condições do trânsito antes de iniciar o deslocamento.`,
-    image: "/images/cameras/cam2.png",
-    // Sempre apontar para o playlist mestre: o chunklist carrega um id de
-    // sessao que muda quando o encoder reinicia e quebraria o player.
-    streamUrl:
-      "https://video04.logicahost.com.br/portovelhomamore/fozpontedaamizadesentidobrasil.stream/playlist.m3u8",
-    latitude: -25.509334,
-    longitude: -54.606988
-  },
-  {
-    id: "3",
     slug: "drone",
     name: "Autódromo Drone",
     location: "Autódromo de Chapecó - SC",
@@ -147,13 +107,13 @@ A câmera mostra em tempo real o fluxo de veículos e pedestres que seguem em di
     description: `Transmissão aérea ao vivo enviada por drone.
 
 O sinal chega ao PROXLIVE em tempo real, direto do equipamento em voo.`,
-    image: "/images/cameras/indisponivel.png",
+    image: "https://stream.proxlive.com.br/thumbs/drone.jpg",
     streamUrl: "https://stream.proxlive.com.br/drone/index.m3u8",
     latitude: -27.1082,
     longitude: -52.6069
   },
   {
-    id: "4",
+    id: "2",
     slug: "autodromo-ptz",
     name: "Autódromo PTZ",
     location: "Autódromo de Chapecó - SC",
@@ -163,13 +123,13 @@ O sinal chega ao PROXLIVE em tempo real, direto do equipamento em voo.`,
     description: `Câmera com lente móvel instalada no Autódromo de Chapecó.
 
 Acompanhe ao vivo a movimentação na pista.`,
-    image: "/images/cameras/indisponivel.png",
+    image: "https://stream.proxlive.com.br/thumbs/autodromo-fixa.jpg",
     streamUrl: "https://stream.proxlive.com.br/autodromo-fixa/index.m3u8",
     latitude: -27.1082,
     longitude: -52.6069
   },
   {
-    id: "5",
+    id: "3",
     slug: "autodromo-panoramica",
     name: "Autódromo Panorâmica",
     location: "Autódromo de Chapecó - SC",
@@ -179,7 +139,7 @@ Acompanhe ao vivo a movimentação na pista.`,
     description: `Câmera panorâmica instalada no Autódromo de Chapecó.
 
 A lente grande-angular cobre uma faixa ampla da pista num único enquadramento.`,
-    image: "/images/cameras/indisponivel.png",
+    image: "https://stream.proxlive.com.br/thumbs/autodromo-pano.jpg",
     streamUrl: "https://stream.proxlive.com.br/autodromo-pano/index.m3u8",
     latitude: -27.1082,
     longitude: -52.6069
