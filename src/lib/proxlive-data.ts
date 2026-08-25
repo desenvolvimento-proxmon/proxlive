@@ -72,7 +72,7 @@ export type SoftwareSection = {
 
 export const heroSlides: HeroSlide[] = [
   {
-    id: "software-analitico-1",
+    id: "1",
     title: "SOFTWARE DE ANALÍTICO DE VÍDEOS COM IA",
     subtitle:
       "Nosso software de analíticos de vídeo transforma um sistema de câmeras convencional em uma solução inteligente com IA.",
@@ -83,7 +83,7 @@ export const heroSlides: HeroSlide[] = [
     cornerLogoAlt: "PROXVISION"
   },
   {
-    id: "software-analitico-2",
+    id: "2",
     title: "SISTEMA COMPLETO PARA GESTÃO CONDOMINIAL",
     subtitle: "Aplicativo para condomínios com mais de 30 funcionalidades.",
     image: "/images/hero/banners2.png",
@@ -97,23 +97,7 @@ export const heroSlides: HeroSlide[] = [
 
 export const cameras: Camera[] = [
   {
-    id: "1",
-    slug: "drone",
-    name: "Autódromo Drone",
-    location: "Autódromo de Chapecó - SC",
-    city: "Chapecó",
-    category: "Drone",
-    summary: "Imagem aérea ao vivo transmitida por drone.",
-    description: `Transmissão aérea ao vivo enviada por drone.
-
-O sinal chega ao PROXLIVE em tempo real, direto do equipamento em voo.`,
-    image: "https://stream.proxlive.com.br/thumbs/drone.jpg",
-    streamUrl: "https://stream.proxlive.com.br/drone/index.m3u8",
-    latitude: -27.1082,
-    longitude: -52.6069
-  },
-  {
-    id: "2",
+    id: "3",
     slug: "autodromo-ptz",
     name: "Autódromo PTZ",
     location: "Autódromo de Chapecó - SC",
@@ -129,7 +113,7 @@ Acompanhe ao vivo a movimentação na pista.`,
     longitude: -52.6069
   },
   {
-    id: "3",
+    id: "4",
     slug: "autodromo-panoramica",
     name: "Autódromo Panorâmica",
     location: "Autódromo de Chapecó - SC",
@@ -148,7 +132,7 @@ A lente grande-angular cobre uma faixa ampla da pista num único enquadramento.`
 
 export const horizontalAds: AdCreative[] = [
   {
-    id: "mhnet",
+    id: "5",
     title: "MHnet Telecom",
     image: "/images/ads/banner-mhnet.png",
     backgroundColor: PRIMARY_BLUE,
@@ -160,7 +144,7 @@ export const horizontalAds: AdCreative[] = [
 
 export const sideAds: AdCreative[] = [
   {
-    id: "eletros",
+    id: "6",
     title: "Assinatura de câmeras",
     image: "/images/ads/side-ad-1.png",
     backgroundColor: "#051f44",
@@ -169,7 +153,7 @@ export const sideAds: AdCreative[] = [
     advertiser: "Eletros Digital"
   },
   {
-    id: "turquesa",
+    id: "7",
     title: "Eletros Digital Security",
     image: "/images/ads/side-ad-2.png",
     backgroundColor: "#2b90a4",
@@ -178,7 +162,7 @@ export const sideAds: AdCreative[] = [
     advertiser: "Eletros Digital"
   },
   {
-    id: "vermelha",
+    id: "8",
     title: "PROX Parking",
     image: "/images/ads/side-ad-3.png",
     backgroundColor: "#ff3131",
@@ -189,7 +173,7 @@ export const sideAds: AdCreative[] = [
 ];
 
 export const cameraDetailHorizontalAd: AdCreative = {
-  id: "camera-detail-mhnet",
+    id: "9",
   title: "MHnet Telecom",
   image: "/images/ads/banner-mhnet.png",
   backgroundColor: PRIMARY_BLUE,
@@ -201,7 +185,7 @@ export const cameraDetailHorizontalAd: AdCreative = {
 /** Coluna lateral da página de câmera, ao lado da descrição. */
 export const cameraDetailSideAds: AdCreative[] = [
   {
-    id: "camera-detail-side",
+    id: "10",
     title: "Eletros Digital Security",
     image: "/images/ads/side-ad-4.png",
     backgroundColor: "#051f44",
@@ -210,7 +194,7 @@ export const cameraDetailSideAds: AdCreative[] = [
     advertiser: "Eletros Digital"
   },
   {
-    id: "camera-detail-side-2",
+    id: "11",
     title: "PROX Parking",
     image: "/images/ads/side-ad-3.png",
     backgroundColor: "#ff3131",
