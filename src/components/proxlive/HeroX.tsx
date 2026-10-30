@@ -67,12 +67,12 @@ export function HeroX() {
     <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10">
       <div
         ref={glowRef}
-        className="absolute left-1/2 top-1/2 h-[70vmin] w-[70vmin] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(0,114,255,0.17),transparent_68%)] blur-2xl will-change-transform"
+        className="absolute left-1/2 top-1/2 h-[86vmin] w-[86vmin] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(0,114,255,0.17),transparent_68%)] blur-2xl will-change-transform"
       />
 
       <div
         ref={wrapRef}
-        className="absolute left-1/2 top-1/2 h-[62vmin] w-[62vmin] -translate-x-1/2 -translate-y-1/2 will-change-transform"
+        className="absolute left-1/2 top-1/2 h-[76vmin] w-[76vmin] -translate-x-1/2 -translate-y-1/2 will-change-transform"
       >
         <div
           className="h-full w-full"

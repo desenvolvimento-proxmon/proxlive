@@ -269,9 +269,20 @@ export type Place = {
    * cenario sem quebrar a paleta monocromatica do site.
    */
   tint: string;
+  /** Foto do lugar. E ela que aparece no card da home. */
+  cover: string;
+  /**
+   * Topo do hub: um frame congelado da propria camera, guardado no repo.
+   * Mostra o enquadramento real de quem chega sem abrir nenhum stream — o
+   * video ao vivo so comeca quando a pessoa escolhe uma camera.
+   * Sem camera no lugar, o hub cai na `cover`.
+   */
+  heroImage?: string;
   cameraSlugs: string[];
   agenda: AgendaItem[];
   tech: TechItem[];
+  /** Proximo evento no lugar. Provisorio ate termos a agenda completa. */
+  nextEvent?: { date: string; title: string };
 };
 
 export const places: Place[] = [
@@ -284,35 +295,23 @@ export const places: Place[] = [
     state: "SC",
     tagline: "A pista ao vivo, 24 horas por dia.",
     tint: "#c2410c",
+    cover: "/images/places/autodromo.jpg",
+    heroImage: "/images/places/autodromo-hero.jpg",
     // CONTEUDO PROVISORIO — substituir pelo texto real do projeto
-    about: `Câmeras instaladas no Autódromo de Chapecó transmitem a pista ao vivo, sem custo e sem cadastro.
+    about: `A Proxmon, em conjunto com o Grupo MHNET Telecom, conduziu o projeto do autódromo de ponta a ponta, do levantamento técnico à implantação.
 
-Acompanhe o movimento em tempo real, de qualquer lugar, pelo computador ou pelo celular.`,
+A pista passou a ser monitorada por torres equipadas com câmeras, que fornecem imagens em tempo real ao Race Control, onde os dirigentes tomam as decisões da prova, e também alimentam a transmissão ao vivo nos canais.
+
+O sistema conta com inteligência artificial capaz de identificar automaticamente carros parados ou acidentados, animais e pessoas na pista e aglomerações, além de realizar reconhecimento facial.
+
+Para integrar toda a operação, foi desenvolvido um software exclusivo para o autódromo, com mapeamento da pista, monitoramento de ativos e eventos e dashboards, operado a partir de uma central de controle dedicada.`,
     heroCamera: "autodromo-panoramica",
     cameraSlugs: ["autodromo-panoramica", "autodromo-ptz"],
     // CONTEUDO PROVISORIO — substituir pelo calendario real
     agenda: [],
-    // CONTEUDO PROVISORIO — substituir pela tecnologia realmente instalada
-    tech: [
-      {
-        id: "ao-vivo",
-        title: "Transmissão ao vivo",
-        description:
-          "Duas lentes cobrindo a pista, com sinal entregue em tempo real pelo nosso próprio servidor de mídia."
-      },
-      {
-        id: "panoramica",
-        title: "Visão panorâmica",
-        description:
-          "Lente grande-angular que cobre uma faixa ampla do traçado num único enquadramento."
-      },
-      {
-        id: "movel",
-        title: "Lente móvel",
-        description:
-          "Câmera com movimento, para acompanhar pontos específicos da pista."
-      }
-    ]
+    tech: [],
+    // CONTEUDO PROVISORIO — o nome da etapa ainda precisa ser confirmado
+    nextEvent: { date: "01/11", title: "Próxima etapa" },
   },
   {
     slug: "cataratas",
@@ -323,6 +322,7 @@ Acompanhe o movimento em tempo real, de qualquer lugar, pelo computador ou pelo 
     state: "PR",
     tagline: "Em breve, ao vivo.",
     tint: "#0d7f8c",
+    cover: "/images/places/cataratas.jpg",
     // CONTEUDO PROVISORIO
     about: `Estamos preparando a transmissão ao vivo das Cataratas do Iguaçu.
 
@@ -346,3 +346,22 @@ export function getPlaceCameras(place: Place) {
 export function getPlaceOfCamera(slug: string) {
   return places.find((place) => place.cameraSlugs.includes(slug));
 }
+
+/* ------------------------------------------------------------------ */
+/* Empresas parceiras                                                  */
+/* ------------------------------------------------------------------ */
+
+export type Partner = {
+  id: string;
+  name: string;
+  logo: string;
+  url?: string;
+};
+
+/** A ordem aqui e a ordem exibida no rodape. */
+export const partners: Partner[] = [
+  { id: "proxmon", name: "PROXMON", logo: "/images/partners/proxmon.webp", url: "https://www.proxmon.com.br" },
+  { id: "eletros", name: "Eletros Digital", logo: "/images/partners/eletros-digital.png", url: "https://www.eletrosdigitalsolutec.com.br" },
+  { id: "mhnet", name: "MHNET Telecom", logo: "/images/partners/mhnet.png", url: "https://mhnet.com.br" },
+  { id: "accron", name: "Accron", logo: "/images/partners/accron.webp" }
+];

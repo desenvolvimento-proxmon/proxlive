@@ -82,17 +82,24 @@ export function CameraCard({ camera, priority = false }: CameraCardProps) {
 
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute inset-0 bg-gradient-to-t from-carbon-950/75 via-transparent to-transparent"
+            className="pointer-events-none absolute inset-0 bg-gradient-to-t from-carbon-950/75 via-transparent to-carbon-950/30"
           />
 
+          {/*
+            Sem pilula escura: o selo vive direto sobre a imagem. A legibilidade
+            vem do degrade acima e de uma sombra de contorno, nao de um fundo —
+            assim o card mostra mais da cena.
+          */}
           <span className="absolute left-4 top-4">
             {live ? (
-              <span className="pin">
-                <span className="h-1.5 w-1.5 animate-live-pulse rounded-full bg-live" />
+              <span className="inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.12em] text-white [text-shadow:0_0_4px_rgba(0,0,0,0.95),0_1px_2px_rgba(0,0,0,1),0_-1px_2px_rgba(0,0,0,0.75)]">
+                <span className="h-[7px] w-[7px] animate-live-pulse rounded-full bg-live shadow-[0_0_7px_rgba(255,59,48,0.95)]" />
                 Ao vivo
               </span>
             ) : (
-              <span className="pin text-carbon-300">Em breve</span>
+              <span className="inline-flex items-center text-[11px] font-semibold uppercase tracking-[0.12em] text-carbon-200 [text-shadow:0_0_4px_rgba(0,0,0,0.95),0_1px_2px_rgba(0,0,0,1)]">
+                Em breve
+              </span>
             )}
           </span>
         </div>

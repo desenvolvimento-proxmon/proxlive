@@ -1,18 +1,13 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { CalendarDays, MapPin } from "lucide-react";
 import { CameraCard } from "@/components/proxlive/CameraCard";
 import { Footer } from "@/components/proxlive/Footer";
-import { LiveHero } from "@/components/proxlive/LiveHero";
 import { Navbar } from "@/components/proxlive/Navbar";
 import { Reveal } from "@/components/proxlive/Reveal";
 import { Section } from "@/components/proxlive/Section";
-import {
-  getCameraBySlug,
-  getPlaceBySlug,
-  getPlaceCameras,
-  places
-} from "@/lib/proxlive-data";
+import { getPlaceBySlug, getPlaceCameras, places } from "@/lib/proxlive-data";
 
 type PlacePageProps = {
   params: Promise<{ slug: string }>;
@@ -32,7 +27,6 @@ export async function generateMetadata({
     return { title: "Lugar não encontrado" };
   }
 
-  const hero = place.heroCamera ? getCameraBySlug(place.heroCamera) : undefined;
   const title = `${place.name} ao vivo`;
   const description = `${place.tagline} Câmeras ao vivo em ${place.location}, sem cadastro.`;
 
@@ -45,7 +39,7 @@ export async function generateMetadata({
       url: `/lugar/${place.slug}/`,
       title: `${title} | PROXLIVE`,
       description,
-      images: hero ? [{ url: hero.image, width: 800, height: 600, alt: place.name }] : []
+      images: [{ url: place.heroImage ?? place.cover, alt: place.name }]
     }
   };
 }
@@ -58,134 +52,97 @@ export default async function PlacePage({ params }: PlacePageProps) {
     notFound();
   }
 
-  const hero = place.heroCamera ? getCameraBySlug(place.heroCamera) : undefined;
   const placeCameras = getPlaceCameras(place);
 
   return (
     <>
       <Navbar />
       <main id="conteudo">
-        {hero ? (
-          <LiveHero
-            compact
-            camera={hero}
-            ghost={place.shortName}
-            eyebrow={place.location}
-            title={place.name}
-            subtitle={place.tagline}
+        {/*
+          Topo com um frame congelado da camera, nao com o sinal ao vivo. O
+          enquadramento e o verdadeiro, mas nao abre stream nenhum para quem
+          ainda nem decidiu olhar — a transmissao comeca nos cards abaixo.
+        */}
+        <section className="relative isolate flex min-h-[62vh] items-end overflow-hidden sm:min-h-[68vh]">
+          <Image
+            src={place.heroImage ?? place.cover}
+            alt=""
+            fill
+            priority
+            sizes="100vw"
+            className="-z-20 object-cover"
           />
-        ) : (
-          /* Lugar anunciado e ainda sem sinal: topo tipografico, sem foto
-             emprestada de outro lugar. */
-          <section className="relative isolate flex min-h-[58vh] items-end overflow-hidden">
-            <div
-              aria-hidden="true"
-              className="absolute inset-0 -z-10 bg-[radial-gradient(90%_80%_at_15%_0%,rgba(0,114,255,0.14),transparent_60%)]"
-            />
-            <span
-              aria-hidden="true"
-              className="ghost-type absolute -bottom-[0.15em] left-0 -z-10 w-full text-[clamp(4rem,17vw,15rem)]"
-            >
-              {place.shortName}
-            </span>
-            <div className="shell relative w-full pb-14 pt-36">
-              <span className="eyebrow">{place.location}</span>
-              <h1 className="mt-5 text-hero text-balance font-display text-white">
-                {place.name}
-              </h1>
-              <p className="mt-6 max-w-xl text-lead text-carbon-300">
-                {place.tagline}
-              </p>
-            </div>
-          </section>
-        )}
+          <div aria-hidden="true" className="scrim-bottom absolute inset-0 -z-10" />
+          <div aria-hidden="true" className="scrim-left absolute inset-0 -z-10" />
 
-        {placeCameras.length > 0 ? (
-        <Section
-          id="cameras"
-          eyebrow="Ao vivo"
-          title="As câmeras daqui"
-          meta={
-            <span className="inline-flex items-center gap-2 text-sm text-carbon-400">
-              <MapPin className="h-4 w-4" />
+          <span
+            aria-hidden="true"
+            className="ghost-type absolute -bottom-[0.15em] left-0 -z-10 w-full text-[clamp(4rem,17vw,15rem)]"
+          >
+            {place.shortName}
+          </span>
+
+          <div className="shell relative w-full pb-14 pt-36">
+            <span className="eyebrow flex items-center gap-2 text-white/70">
+              <MapPin className="h-3.5 w-3.5" />
               {place.location}
             </span>
-          }
-          className="pt-4"
-        >
-          <div className="grid gap-5 md:grid-cols-2">
-            {placeCameras.map((camera, index) => (
-              <Reveal key={camera.id} delay={index * 80} className="h-full">
-                <CameraCard camera={camera} priority={index < 2} />
-              </Reveal>
-            ))}
+            <h1 className="mt-5 text-hero text-balance font-display text-white">
+              {place.name}
+            </h1>
+            <p className="mt-5 max-w-xl text-lead text-carbon-200">
+              {place.tagline}
+            </p>
           </div>
-        </Section>
-        ) : null}
+        </section>
 
-        {place.agenda.length > 0 ? (
-          <Section
-            id="agenda"
-            eyebrow="Agenda"
-            title="O que vem por aí"
-            className="pt-10"
-          >
-            <ul className="space-y-px overflow-hidden rounded-2xl bg-carbon-900 shadow-hair">
-              {place.agenda.map((item, index) => (
-                <Reveal as="li" key={item.id} delay={index * 60}>
-                  <div className="flex flex-col gap-2 border-b border-white/[0.06] px-6 py-6 transition-colors duration-300 hover:bg-carbon-850 sm:flex-row sm:items-center sm:gap-8">
-                    <span className="eyebrow flex w-32 shrink-0 items-center gap-2 text-brand-400">
-                      <CalendarDays className="h-3.5 w-3.5" />
-                      {item.date}
-                    </span>
-                    <div className="min-w-0">
-                      <h3 className="text-base font-semibold text-white">
-                        {item.title}
-                      </h3>
-                      {item.detail ? (
-                        <p className="mt-1 text-sm text-carbon-400">{item.detail}</p>
-                      ) : null}
-                    </div>
-                  </div>
+        {placeCameras.length > 0 ? (
+          <Section id="cameras" eyebrow="Ao vivo" title="As câmeras daqui">
+            <div className="grid gap-5 md:grid-cols-2">
+              {placeCameras.map((camera, index) => (
+                <Reveal key={camera.id} delay={index * 80} className="h-full">
+                  <CameraCard camera={camera} priority={index < 2} />
                 </Reveal>
               ))}
-            </ul>
+            </div>
           </Section>
         ) : null}
 
         <Section
           id="projeto"
           eyebrow="O projeto"
-          title={`Por que o ${place.shortName} está no ar`}
+          title="O que a Proxmon executou nesse projeto"
           className="pt-10"
         >
-          <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_380px]">
+          <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_320px]">
             <Reveal>
-              <div className="prose-measure whitespace-pre-line text-base">
+              {/*
+                Justificado com hifenizacao: sem os hifens, justificar em
+                portugues abre buracos entre as palavras.
+              */}
+              <div className="prose-measure hyphens-auto whitespace-pre-line text-justify text-base">
                 {place.about}
               </div>
             </Reveal>
 
-            <Reveal delay={80}>
-              <div className="space-y-px overflow-hidden rounded-2xl bg-carbon-900 shadow-hair">
-                {place.tech.map((item) => (
-                  <div
-                    key={item.id}
-                    className="border-b border-white/[0.06] p-6 last:border-0"
-                  >
-                    <h3 className="text-sm font-semibold text-white">
-                      {item.title}
-                    </h3>
-                    <p className="mt-2 text-sm leading-relaxed text-carbon-400">
-                      {item.description}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </Reveal>
+            {place.nextEvent ? (
+              <Reveal delay={80}>
+                <div className="rounded-2xl bg-carbon-900 p-7 shadow-hair">
+                  <span className="eyebrow flex items-center gap-2">
+                    <CalendarDays className="h-3.5 w-3.5" />
+                    Próximo evento
+                  </span>
+                  <p className="mt-5 font-display text-title text-white">
+                    {place.nextEvent.title}
+                  </p>
+                  <p className="mt-2 text-sm text-carbon-400">
+                    {place.nextEvent.date}
+                  </p>
+                </div>
+              </Reveal>
+            ) : null}
           </div>
         </Section>
-
       </main>
       <Footer />
     </>

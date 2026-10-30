@@ -61,27 +61,25 @@ export function PlaceCard({ place, hero, cameraCount }: PlaceCardProps) {
       className="focus-ring group block h-full rounded-3xl"
     >
       <article className="relative flex h-full min-h-[26rem] flex-col justify-end overflow-hidden rounded-3xl bg-carbon-900 shadow-hair transition-[box-shadow,transform] duration-500 ease-out-quint group-hover:-translate-y-1 group-hover:shadow-hair-strong sm:min-h-[30rem]">
+        <Image
+          src={place.cover}
+          alt=""
+          fill
+          sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+          className="object-cover opacity-60 transition-[transform,opacity] duration-[1200ms] ease-out-expo group-hover:scale-[1.05] group-hover:opacity-75"
+        />
         {hero ? (
-          <>
-            <Image
-              src={hero.image}
-              alt=""
-              fill
-              sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-              className="object-cover opacity-55 transition-[transform,opacity] duration-[1200ms] ease-out-expo group-hover:scale-[1.05] group-hover:opacity-70"
-            />
-            <video
-              ref={videoRef}
-              muted
-              playsInline
-              autoPlay
-              aria-hidden="true"
-              tabIndex={-1}
-              className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ${
-                playing ? "opacity-70" : "opacity-0"
-              }`}
-            />
-          </>
+          <video
+            ref={videoRef}
+            muted
+            playsInline
+            autoPlay
+            aria-hidden="true"
+            tabIndex={-1}
+            className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ${
+              playing ? "opacity-70" : "opacity-0"
+            }`}
+          />
         ) : null}
 
         {/* Tom do lugar, bem rebaixado: identidade sem virar cor de marca. */}

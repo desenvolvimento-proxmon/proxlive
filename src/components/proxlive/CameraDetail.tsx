@@ -23,11 +23,14 @@ export function CameraDetail({
 
   return (
     <main id="conteudo">
-      <div className="shell pt-28">
+      <div className="shell pt-24 sm:pt-28">
         <nav aria-label="Trilha" className="mb-7">
           <ol className="flex flex-wrap items-center gap-1 text-xs text-carbon-500">
             <li>
-              <Link href="/" className="focus-ring rounded transition-colors hover:text-white">
+              <Link
+                href="/"
+                className="focus-ring inline-block rounded py-1.5 transition-colors hover:text-white"
+              >
                 Início
               </Link>
             </li>
@@ -37,7 +40,7 @@ export function CameraDetail({
                 <li>
                   <Link
                     href={`/lugar/${place.slug}`}
-                    className="focus-ring rounded transition-colors hover:text-white"
+                    className="focus-ring inline-block rounded py-1.5 transition-colors hover:text-white"
                   >
                     {place.shortName}
                   </Link>
@@ -81,23 +84,18 @@ export function CameraDetail({
           </div>
         </div>
 
-        <div className="relative aspect-video overflow-hidden rounded-3xl shadow-glow">
+        {/*
+          No celular o player sangra ate as bordas: a margem lateral do `shell`
+          custava ~10% da largura da imagem, que e a unica coisa que a pessoa
+          veio ver.
+        */}
+        <div className="relative -mx-5 aspect-video overflow-hidden shadow-glow sm:mx-0 sm:rounded-3xl">
           <CameraPlayer camera={camera} />
         </div>
       </div>
 
-      <Section
-        eyebrow="Sobre"
-        title="Este ponto"
-        className="pt-14"
-      >
-        <div className="prose-measure whitespace-pre-line text-base">
-          {camera.description}
-        </div>
-      </Section>
-
       {siblings.length > 0 ? (
-        <Section eyebrow="Também ao vivo" title="Outras câmeras" className="pt-10">
+        <Section eyebrow="Também ao vivo" title="Outras câmeras" className="pt-12">
           <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
             {siblings.map((item, index) => (
               <Reveal key={item.id} delay={index * 70} className="h-full">

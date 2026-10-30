@@ -74,9 +74,14 @@ export function Navbar() {
         </button>
       </nav>
 
-      {/* grid-rows anima a altura sem precisar medir o conteudo */}
+      {/*
+        grid-rows anima a altura sem precisar medir o conteudo. `inert` e o que
+        faz os links sairem do tab e do leitor de tela com o menu fechado:
+        `overflow-hidden` esconde do olho, mas nao do teclado.
+      */}
       <div
-        className={`grid overflow-hidden border-t border-white/[0.07] bg-carbon-950/95 backdrop-blur-xl transition-[grid-template-rows,opacity] duration-400 ease-out-quint md:hidden ${
+        inert={!open}
+        className={`grid overflow-hidden border-t border-white/[0.07] bg-carbon-950/95 backdrop-blur-xl transition-[grid-template-rows,opacity] duration-500 ease-out-quint md:hidden ${
           open ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
         }`}
       >

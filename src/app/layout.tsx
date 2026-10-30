@@ -104,19 +104,21 @@ export default function RootLayout({
     <html lang="pt-BR" className={`${inter.variable} ${display.variable}`}>
       <head>
         {/*
-          Marca <html> antes da primeira pintura. Enquanto essa classe nao
-          existir, o CSS mantem os blocos `.reveal` visiveis — sem JS, nada
-          desaparece.
+          Rede de seguranca dos blocos `.reveal`, que nascem invisiveis e so
+          aparecem quando o IntersectionObserver os alcanca: sem JS ninguem os
+          revelaria. O <noscript> so entra em cena com script desligado, e por
+          ser CSS puro nao mexe no DOM — a tentativa anterior marcava o <html>
+          antes da hidratacao e quebrava o casamento servidor/cliente em todas
+          as paginas.
         */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: "document.documentElement.classList.add('js')"
-          }}
-        />
+        <noscript>
+          <style>{".reveal{opacity:1;transform:none}"}</style>
+        </noscript>
         {/* Handshake antecipado com os CDNs de HLS, mapa e tiles. */}
         <link rel="preconnect" href="https://cdn.jsdelivr.net" crossOrigin="" />
         <link rel="preconnect" href="https://unpkg.com" crossOrigin="" />
-        <link rel="dns-prefetch" href="https://video04.logicahost.com.br" />
+        <link rel="dns-prefetch" href="https://stream.proxlive.com.br" />
+        <link rel="dns-prefetch" href="https://server.arcgisonline.com" />
       </head>
       <body>
         <JsonLd data={organizationSchema()} />

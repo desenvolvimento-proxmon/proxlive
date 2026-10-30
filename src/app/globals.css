@@ -180,11 +180,11 @@ select {
   will-change: auto;
 }
 
-/* Sem JS o conteúdo nunca pode ficar invisível. */
-html:not(.js) .reveal {
-  opacity: 1;
-  transform: none;
-}
+/*
+  Sem JS o conteúdo nunca pode ficar invisível. A regra que garante isso vive
+  num <noscript> no layout: assim nada precisa marcar o <html> antes da
+  hidratação, que era o que quebrava o casamento servidor/cliente.
+*/
 
 @media (prefers-reduced-motion: reduce) {
   html {

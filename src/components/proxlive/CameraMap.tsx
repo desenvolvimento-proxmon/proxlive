@@ -13,6 +13,15 @@ type CameraMapProps = {
   cameras: Camera[];
 };
 
+/** Teto de tiles da base escura da Esri; acima disso vem imagem vazia. */
+const MAX_ZOOM = 16;
+/**
+ * Zoom usado quando as cameras dividem o mesmo ponto — hoje as duas ficam na
+ * mesma torre. Sem este teto o `fitBounds` de uma area sem tamanho ia direto
+ * ao zoom maximo e o mapa virava um quadrado liso.
+ */
+const ZOOM_PADRAO = 15;
+
 type LeafletPopupEvent = {
   popup?: {
     getElement: () => HTMLElement | null;
@@ -22,7 +31,10 @@ type LeafletPopupEvent = {
 type LeafletMap = {
   remove: () => void;
   invalidateSize: () => void;
-  fitBounds: (bounds: unknown, options?: { padding?: [number, number] }) => void;
+  fitBounds: (
+    bounds: unknown,
+    options?: { padding?: [number, number]; maxZoom?: number }
+  ) => void;
   setView: (center: [number, number], zoom: number) => LeafletMap;
   on: (
     eventName: "popupopen" | "popupclose",
@@ -244,7 +256,8 @@ export function CameraMap({ cameras }: CameraMapProps) {
 
         map = L.map(mapElementRef.current, {
           center,
-          zoom: 14,
+          zoom: ZOOM_PADRAO,
+          maxZoom: MAX_ZOOM,
           scrollWheelZoom: true
         });
 
@@ -257,14 +270,17 @@ export function CameraMap({ cameras }: CameraMapProps) {
         resizeObserver = new ResizeObserver(() => map?.invalidateSize());
         resizeObserver.observe(mapElementRef.current);
 
-        // Base escura, para o mapa conversar com o resto do site. Para voltar ao claro, use
-        // "{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png".
+        // Base escura da Esri. A CARTO, usada antes, passou a exigir chave de
+        // API e devolvia um tile cinza escrito "API KEY REQUIRED" em todo
+        // lugar. Esta e aberta e nao pede chave. Atencao a ordem {z}/{y}/{x},
+        // que e invertida em relacao ao padrao do Leaflet, e ao teto de zoom
+        // 16: dali para cima o servico devolve tile vazio.
         L.tileLayer(
-          "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
+          "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}",
           {
-            attribution: "&copy; OpenStreetMap &copy; CARTO",
-            subdomains: "abcd",
-            maxZoom: 20
+            attribution:
+              "&copy; Esri, HERE, Garmin, &copy; OpenStreetMap",
+            maxZoom: MAX_ZOOM
           }
         ).addTo(map);
 
@@ -298,7 +314,10 @@ export function CameraMap({ cameras }: CameraMapProps) {
         });
 
         if (coordinates.length > 1) {
-          map.fitBounds(L.latLngBounds(coordinates), { padding: [34, 34] });
+          map.fitBounds(L.latLngBounds(coordinates), {
+            padding: [34, 34],
+            maxZoom: ZOOM_PADRAO
+          });
         }
 
         const selectedSlug = new URLSearchParams(window.location.search).get(

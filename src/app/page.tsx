@@ -20,11 +20,11 @@ export default function HomePage() {
         <section className="relative isolate flex min-h-[88vh] items-center justify-center overflow-hidden">
           <HeroX />
 
-          <div className="shell relative w-full py-32 text-center">
-            <h1 className="mx-auto max-w-2xl text-hero text-balance font-display text-white">
+          <div className="shell relative w-full py-32">
+            <h1 className="max-w-2xl text-hero text-balance font-display text-white">
               Conecte-se ao que acontece agora
             </h1>
-            <p className="mx-auto mt-5 max-w-md text-sm leading-relaxed text-carbon-400">
+            <p className="mt-5 max-w-md text-sm leading-relaxed text-carbon-400">
               Acesse câmeras ao vivo e acompanhe o que importa para você, de onde estiver.
             </p>
           </div>
@@ -32,8 +32,8 @@ export default function HomePage() {
 
         <Section
           id="lugares"
-          eyebrow="Lugares"
-          title="Onde estamos"
+          eyebrow="Para onde você quer olhar?"
+          title="Escolha um destino e assista em tempo real."
         >
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {places.map((place, index) => (

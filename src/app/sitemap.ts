@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { cameras, isLive, siteConfig } from "@/lib/proxlive-data";
+import { cameras, isLive, places, siteConfig } from "@/lib/proxlive-data";
 
 export const dynamic = "force-static";
 
@@ -13,6 +13,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "hourly",
       priority: 1
     },
+    // Os hubs de lugar sao as paginas de entrada: vem antes das cameras.
+    ...places.map((place) => ({
+      url: `${siteConfig.url}/lugar/${place.slug}/`,
+      lastModified: now,
+      changeFrequency: "daily" as const,
+      priority: place.cameraSlugs.length > 0 ? 0.9 : 0.4
+    })),
     ...cameras.map((camera) => ({
       url: `${siteConfig.url}/camera/${camera.slug}/`,
       lastModified: now,
