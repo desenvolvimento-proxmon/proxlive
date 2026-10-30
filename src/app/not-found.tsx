@@ -25,7 +25,7 @@ export default function NotFound() {
 
         <div className="relative max-w-xl">
           <span className="eyebrow">Erro 404</span>
-          <h1 className="mt-5 text-display text-balance text-white">
+          <h1 className="mt-5 text-display text-balance font-display text-white">
             Essa página saiu do ar.
           </h1>
           <p className="prose-measure mt-6">

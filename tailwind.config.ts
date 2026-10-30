@@ -47,26 +47,30 @@ const config: Config = {
         }
       },
       fontFamily: {
-        sans: ["var(--font-inter)", "ui-sans-serif", "system-ui", "sans-serif"]
+        sans: ["var(--font-inter)", "ui-sans-serif", "system-ui", "sans-serif"],
+        /** Titulos: grotesca geometrica, com mais carater que a Inter. */
+        display: ["var(--font-display)", "var(--font-inter)", "sans-serif"]
       },
       fontSize: {
-        /** Escala editorial: o nome domina, o resto sussurra. */
+        /**
+         * Escala contida. A versao anterior tinha o h1 em 128px: o X e o
+         * assunto da home, e tipografia gigante competia com ele.
+         */
         hero: [
-          "clamp(2.75rem, 1.2rem + 7vw, 8rem)",
-          { lineHeight: "0.92", letterSpacing: "-0.045em", fontWeight: "800" }
+          "clamp(1.75rem, 1.2rem + 2vw, 2.75rem)",
+          { lineHeight: "1.08", letterSpacing: "-0.03em", fontWeight: "600" }
         ],
         display: [
-          "clamp(2rem, 1.2rem + 3.6vw, 4.25rem)",
-          { lineHeight: "1.02", letterSpacing: "-0.038em", fontWeight: "700" }
+          "clamp(1.125rem, 1rem + 0.7vw, 1.5rem)",
+          { lineHeight: "1.2", letterSpacing: "-0.022em", fontWeight: "600" }
         ],
         title: [
-          "clamp(1.5rem, 1.1rem + 1.6vw, 2.25rem)",
-          { lineHeight: "1.12", letterSpacing: "-0.028em", fontWeight: "700" }
+          "clamp(1rem, 0.95rem + 0.35vw, 1.125rem)",
+          { lineHeight: "1.3", letterSpacing: "-0.018em", fontWeight: "600" }
         ],
-        /** Rotulos pequenos em caixa alta, muito espacados. */
         eyebrow: [
-          "0.6875rem",
-          { lineHeight: "1", letterSpacing: "0.18em", fontWeight: "600" }
+          "0.625rem",
+          { lineHeight: "1", letterSpacing: "0.2em", fontWeight: "500" }
         ],
         lead: ["1.0625rem", { lineHeight: "1.65", letterSpacing: "-0.006em" }]
       },

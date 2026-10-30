@@ -264,6 +264,11 @@ export type Place = {
   about: string;
   /** Camera que aparece como imagem heroica do hub. Vazio = ainda sem sinal. */
   heroCamera?: string;
+  /**
+   * Tom do lugar, usado em opacidade baixa no card. Da identidade a cada
+   * cenario sem quebrar a paleta monocromatica do site.
+   */
+  tint: string;
   cameraSlugs: string[];
   agenda: AgendaItem[];
   tech: TechItem[];
@@ -278,6 +283,7 @@ export const places: Place[] = [
     city: "Chapecó",
     state: "SC",
     tagline: "A pista ao vivo, 24 horas por dia.",
+    tint: "#c2410c",
     // CONTEUDO PROVISORIO — substituir pelo texto real do projeto
     about: `Câmeras instaladas no Autódromo de Chapecó transmitem a pista ao vivo, sem custo e sem cadastro.
 
@@ -316,6 +322,7 @@ Acompanhe o movimento em tempo real, de qualquer lugar, pelo computador ou pelo 
     city: "Foz do Iguaçu",
     state: "PR",
     tagline: "Em breve, ao vivo.",
+    tint: "#0d7f8c",
     // CONTEUDO PROVISORIO
     about: `Estamos preparando a transmissão ao vivo das Cataratas do Iguaçu.
 

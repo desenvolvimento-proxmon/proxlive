@@ -25,10 +25,10 @@ export function Section({
   return (
     <section id={id} className={`shell scroll-mt-24 ${className}`}>
       <div className="rule" />
-      <div className="flex flex-col gap-6 py-10 md:flex-row md:items-end md:justify-between md:py-14">
+      <div className="flex flex-col gap-5 py-9 md:flex-row md:items-end md:justify-between md:py-11">
         <div className="max-w-2xl">
           {eyebrow ? <span className="eyebrow">{eyebrow}</span> : null}
-          <h2 className="mt-4 text-display text-balance text-white">{title}</h2>
+          <h2 className="mt-3.5 text-display text-balance font-display text-white">{title}</h2>
           {description ? (
             <p className="prose-measure mt-5">{description}</p>
           ) : null}

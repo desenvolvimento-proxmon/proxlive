@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Space_Grotesk } from "next/font/google";
 import { siteConfig } from "@/lib/proxlive-data";
 import { JsonLd, organizationSchema, websiteSchema } from "@/lib/structured-data";
 import "./globals.css";
@@ -8,6 +8,18 @@ const inter = Inter({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-inter"
+});
+
+/**
+ * Space Grotesk nos titulos. A Inter e otima para texto corrido, mas e
+ * neutra demais para dar personalidade — e falta de personalidade foi
+ * justamente a critica ao layout anterior.
+ */
+const display = Space_Grotesk({
+  subsets: ["latin"],
+  display: "swap",
+  weight: ["500", "600", "700"],
+  variable: "--font-display"
 });
 
 export const metadata: Metadata = {
@@ -89,7 +101,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-BR" className={inter.variable}>
+    <html lang="pt-BR" className={`${inter.variable} ${display.variable}`}>
       <head>
         {/*
           Marca <html> antes da primeira pintura. Enquanto essa classe nao

@@ -96,7 +96,7 @@ export function LiveHero({
             </span>
           ) : null}
 
-          <h1 className="mt-5 text-hero text-balance text-white">{title}</h1>
+          <h1 className="mt-5 text-hero text-balance font-display text-white">{title}</h1>
 
           {subtitle ? (
             <p className="mt-6 max-w-xl text-lead text-carbon-200">{subtitle}</p>

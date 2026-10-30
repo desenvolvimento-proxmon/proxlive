@@ -59,7 +59,7 @@ export function CameraDetail({
               ) : null}
               {live ? "Ao vivo agora" : "Em breve"}
             </span>
-            <h1 className="mt-4 text-display text-balance text-white">
+            <h1 className="mt-4 text-display text-balance font-display text-white">
               {camera.name}
             </h1>
             <p className="mt-4 flex items-center gap-2 text-sm text-carbon-400">

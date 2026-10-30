@@ -234,10 +234,13 @@ html:not(.js) .reveal {
   margin: 8px;
 }
 
-.leaflet-control-attribution {
+/* O Leaflet traz cor propria na atribuicao; sem !important ela vence a nossa
+   e o texto fica ilegivel sobre o fundo escuro. */
+.leaflet-control-attribution,
+.leaflet-control-attribution span {
   font-size: 10px;
-  background: rgba(14, 16, 21, 0.8) !important;
-  color: theme("colors.carbon.400");
+  background: rgba(14, 16, 21, 0.85) !important;
+  color: theme("colors.carbon.300") !important;
   backdrop-filter: blur(4px);
 }
 

@@ -99,7 +99,7 @@ export function CameraCard({ camera, priority = false }: CameraCardProps) {
 
         <div className="flex flex-1 items-start justify-between gap-4 p-5">
           <div className="min-w-0">
-            <h3 className="text-[0.9375rem] font-semibold leading-tight tracking-[-0.015em] text-white">
+            <h3 className="font-display text-[0.9375rem] font-semibold leading-tight tracking-[-0.015em] text-white">
               {camera.name}
             </h3>
             <p className="mt-2 flex items-start gap-1.5 text-xs leading-relaxed text-carbon-400">

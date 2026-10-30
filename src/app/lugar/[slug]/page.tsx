@@ -90,7 +90,7 @@ export default async function PlacePage({ params }: PlacePageProps) {
             </span>
             <div className="shell relative w-full pb-14 pt-36">
               <span className="eyebrow">{place.location}</span>
-              <h1 className="mt-5 text-hero text-balance text-white">
+              <h1 className="mt-5 text-hero text-balance font-display text-white">
                 {place.name}
               </h1>
               <p className="mt-6 max-w-xl text-lead text-carbon-300">
