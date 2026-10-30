@@ -65,7 +65,7 @@ export function ShareButton({ title, text, camera }: ShareButtonProps) {
         type="button"
         onClick={handleClick}
         aria-expanded={open}
-        className="btn btn-sm btn-on-dark"
+        className="btn btn-sm btn-outline"
       >
         {copied ? (
           <Check className="h-4 w-4" />
@@ -76,21 +76,21 @@ export function ShareButton({ title, text, camera }: ShareButtonProps) {
       </button>
 
       {open ? (
-        <div className="animate-fade-in absolute right-0 z-20 mt-2 w-56 overflow-hidden rounded-xl border border-ink-100 bg-white p-1 text-sm shadow-e4">
+        <div className="animate-fade-in absolute right-0 z-20 mt-2 w-56 overflow-hidden rounded-xl bg-carbon-850 shadow-hair p-1 text-sm shadow-lift-lg">
           <button
             type="button"
             onClick={handleWhatsapp}
-            className="flex w-full items-center gap-2.5 rounded-lg px-3 py-2.5 text-left text-ink-700 transition-colors hover:bg-ink-50 hover:text-ink-900"
+            className="flex w-full items-center gap-2.5 rounded-lg px-3 py-2.5 text-left text-carbon-200 transition-colors hover:bg-white/[0.06] hover:text-white"
           >
-            <MessageCircle className="h-4 w-4 text-brand-500" />
+            <MessageCircle className="h-4 w-4 text-brand-400" />
             Enviar pelo WhatsApp
           </button>
           <button
             type="button"
             onClick={handleCopy}
-            className="flex w-full items-center gap-2.5 rounded-lg px-3 py-2.5 text-left text-ink-700 transition-colors hover:bg-ink-50 hover:text-ink-900"
+            className="flex w-full items-center gap-2.5 rounded-lg px-3 py-2.5 text-left text-carbon-200 transition-colors hover:bg-white/[0.06] hover:text-white"
           >
-            <Copy className="h-4 w-4 text-brand-500" />
+            <Copy className="h-4 w-4 text-brand-400" />
             Copiar link
           </button>
         </div>

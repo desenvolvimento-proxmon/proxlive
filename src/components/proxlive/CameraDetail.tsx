@@ -1,10 +1,12 @@
 import Link from "next/link";
-import { ChevronRight, FileText, Map, MapPin } from "lucide-react";
+import { ChevronRight, Map, MapPin } from "lucide-react";
 import type { AdCreative, Camera } from "@/lib/proxlive-data";
-import { AvailableCamerasList } from "./AvailableCamerasList";
+import { getPlaceOfCamera } from "@/lib/proxlive-data";
 import { AdSlot } from "./AdSlot";
+import { CameraCard } from "./CameraCard";
 import { CameraPlayer } from "./CameraPlayer";
 import { Reveal } from "./Reveal";
+import { Section } from "./Section";
 import { ShareButton } from "./ShareButton";
 
 type CameraDetailProps = {
@@ -20,125 +22,113 @@ export function CameraDetail({
   horizontalAd,
   sideAds
 }: CameraDetailProps) {
+  const live = Boolean(camera.streamUrl?.trim());
+  const place = getPlaceOfCamera(camera.slug);
+  const siblings = cameras.filter((item) => item.slug !== camera.slug);
+
   return (
     <main id="conteudo">
-      <div className="relative isolate overflow-hidden bg-ink-950">
-        <div
-          aria-hidden="true"
-          className="absolute inset-0 -z-10 bg-[radial-gradient(80%_60%_at_20%_0%,rgba(0,114,255,0.20),transparent_60%)]"
-        />
+      <div className="shell pt-28">
+        <nav aria-label="Trilha" className="mb-7">
+          <ol className="flex flex-wrap items-center gap-1 text-xs text-carbon-500">
+            <li>
+              <Link href="/" className="focus-ring rounded transition-colors hover:text-white">
+                Início
+              </Link>
+            </li>
+            {place ? (
+              <>
+                <ChevronRight aria-hidden="true" className="h-3.5 w-3.5" />
+                <li>
+                  <Link
+                    href={`/lugar/${place.slug}`}
+                    className="focus-ring rounded transition-colors hover:text-white"
+                  >
+                    {place.shortName}
+                  </Link>
+                </li>
+              </>
+            ) : null}
+            <ChevronRight aria-hidden="true" className="h-3.5 w-3.5" />
+            <li aria-current="page" className="truncate text-carbon-300">
+              {camera.name}
+            </li>
+          </ol>
+        </nav>
 
-        <div className="proxlive-container py-5 lg:py-7">
-          <nav aria-label="Trilha" className="mb-4">
-            <ol className="flex items-center gap-1 text-xs text-white/45">
-              <li>
-                <Link
-                  href="/"
-                  className="proxlive-focus-dark rounded transition-colors hover:text-white/80"
-                >
-                  Câmeras ao vivo
-                </Link>
-              </li>
-              <ChevronRight aria-hidden="true" className="h-3.5 w-3.5" />
-              <li aria-current="page" className="truncate text-white/75">
-                {camera.name}
-              </li>
-            </ol>
-          </nav>
-
-          {/*
-            A coluna da direita antes era um espaçador vazio de 390px, o que
-            deixava um vão escuro ao lado do vídeo no desktop. Agora carrega a
-            identificação da câmera e as ações.
-          */}
-          <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_340px]">
-            <div className="min-w-0">
-              <div className="relative aspect-video overflow-hidden rounded-2xl shadow-e4 ring-1 ring-white/10">
-                <CameraPlayer camera={camera} />
-              </div>
-            </div>
-
-            <div className="flex flex-col lg:py-1">
-              <h1 className="text-title text-balance text-white">
-                {camera.name}
-              </h1>
-
-              <p className="mt-3 flex items-start gap-2 text-sm leading-relaxed text-white/55">
-                <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-brand-400" />
-                {camera.location}
-              </p>
-
-              <div className="mt-6 flex flex-wrap gap-2.5">
-                <Link
-                  href={`/?camera=${camera.slug}#mapa-cameras`}
-                  className="btn btn-sm btn-on-dark-solid"
-                >
-                  <Map className="h-4 w-4" />
-                  Ver no mapa
-                </Link>
-                <ShareButton
-                  title={`Câmera ao vivo — ${camera.name}`}
-                  text={camera.summary}
-                  camera={camera.slug}
-                />
-              </div>
-
-              {/* Ocupa o espaço vazio ao lado do vídeo e mantém o visitante
-                  circulando entre as câmeras sem descer a página. */}
-              <div className="mt-7 border-t border-white/10 pt-6">
-                <AvailableCamerasList
-                  cameras={cameras}
-                  currentSlug={camera.slug}
-                />
-              </div>
-            </div>
+        <div className="flex flex-col gap-5 pb-8 lg:flex-row lg:items-end lg:justify-between">
+          <div className="min-w-0">
+            <span className="eyebrow flex items-center gap-2.5">
+              {live ? (
+                <span className="h-1.5 w-1.5 animate-live-pulse rounded-full bg-live" />
+              ) : null}
+              {live ? "Ao vivo agora" : "Em breve"}
+            </span>
+            <h1 className="mt-4 text-display text-balance text-white">
+              {camera.name}
+            </h1>
+            <p className="mt-4 flex items-center gap-2 text-sm text-carbon-400">
+              <MapPin className="h-4 w-4 shrink-0" />
+              {camera.location}
+            </p>
           </div>
+
+          <div className="flex flex-wrap gap-2.5">
+            <Link href="/#mapa" className="btn btn-sm btn-outline">
+              <Map className="h-4 w-4" />
+              Ver no mapa
+            </Link>
+            <ShareButton
+              title={`Câmera ao vivo — ${camera.name}`}
+              text={camera.summary}
+              camera={camera.slug}
+            />
+          </div>
+        </div>
+
+        <div className="relative aspect-video overflow-hidden rounded-3xl shadow-glow">
+          <CameraPlayer camera={camera} />
         </div>
       </div>
 
-      <section className="proxlive-container grid gap-8 py-12 lg:grid-cols-[minmax(0,1fr)_340px] lg:gap-10">
-        <div className="min-w-0">
-          <Reveal>
-            <h2 className="mb-4 flex items-center gap-2.5 text-sm font-semibold tracking-[-0.012em] text-ink-900">
-              <span className="inline-flex h-7 w-7 items-center justify-center rounded-md bg-brand-50 text-brand-500 ring-1 ring-inset ring-brand-500/10">
-                <FileText className="h-4 w-4" strokeWidth={2.1} />
-              </span>
-              Sobre este ponto
-            </h2>
-            {/*
-              pl-[38px] = ícone (28px) + gap (10px) do título, para o corpo
-              nascer na mesma vertical que "Sobre este ponto". Vale em toda
-              largura: limitado a `sm`, desalinhava em janelas estreitas.
-              `hyphens-auto` acompanha o `text-justify`: sem hifenização, a
-              justificação abre buracos entre as palavras numa coluna estreita.
-              Medida controlada: antes era `max-w-none` num container de 1200px.
-            */}
-            <div className="prose-measure hyphens-auto whitespace-pre-line break-words pl-[38px] text-justify">
-              {camera.description}
-            </div>
-          </Reveal>
-
-          <Reveal delay={80} className="mt-10">
+      <Section
+        eyebrow="Sobre"
+        title="Este ponto"
+        className="pt-14"
+        meta={
+          <div className="w-full sm:w-[300px]">
             <AdSlot
-              ads={[horizontalAd]}
-              format="horizontal"
-              placement="camera_detail_below_description"
-            />
-          </Reveal>
-        </div>
-
-        {/* Sticky: acompanha a rolagem enquanto a pessoa assiste. */}
-        <div className="space-y-5 lg:sticky lg:top-[88px] lg:self-start">
-          {sideAds.map((ad, index) => (
-            <AdSlot
-              key={ad.id}
-              ads={[ad]}
+              ads={sideAds}
               format="side"
-              placement={`camera_detail_sidebar_${index + 1}`}
+              placement="camera_detail_sidebar"
             />
-          ))}
+          </div>
+        }
+      >
+        <div className="prose-measure whitespace-pre-line text-base">
+          {camera.description}
         </div>
-      </section>
+
+        <Reveal className="mt-14">
+          <AdSlot
+            ads={[horizontalAd]}
+            format="horizontal"
+            placement="camera_detail_below_description"
+          />
+        </Reveal>
+      </Section>
+
+      {siblings.length > 0 ? (
+        <Section eyebrow="Também ao vivo" title="Outras câmeras" className="pt-10">
+          <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+            {siblings.map((item, index) => (
+              <Reveal key={item.id} delay={index * 70} className="h-full">
+                <CameraCard camera={item} />
+              </Reveal>
+            ))}
+          </div>
+        </Section>
+      ) : null}
     </main>
   );
 }

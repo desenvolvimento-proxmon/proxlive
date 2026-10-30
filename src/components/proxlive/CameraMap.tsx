@@ -99,8 +99,8 @@ function buildPopup(camera: Camera) {
         ${preview}
         ${liveBadge}
       </div>
-      <strong style="display:block;margin-top:12px;font-size:14px;font-weight:600;line-height:1.3;letter-spacing:-0.012em;color:#131c2e;">${name}</strong>
-      <p style="margin:4px 0 12px;color:#65728d;font-size:11.5px;line-height:1.4;">${location}</p>
+      <strong style="display:block;margin-top:12px;font-size:14px;font-weight:600;line-height:1.3;letter-spacing:-0.012em;color:#f5f6f8;">${name}</strong>
+      <p style="margin:4px 0 12px;color:#99a0b0;font-size:11.5px;line-height:1.4;">${location}</p>
       <a href="${cameraUrl}" style="display:block;text-align:center;background:#0072ff;color:#fff;padding:9px 13px;border-radius:8px;text-decoration:none;font-weight:600;font-size:12.5px;">Assistir ao vivo</a>
     </div>
   `;
@@ -257,10 +257,10 @@ export function CameraMap({ cameras }: CameraMapProps) {
         resizeObserver = new ResizeObserver(() => map?.invalidateSize());
         resizeObserver.observe(mapElementRef.current);
 
-        // Base colorida. Para voltar ao OSM padrao, troque a URL por
-        // "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" e remova `subdomains`.
+        // Base escura, para o mapa conversar com o resto do site. Para voltar ao claro, use
+        // "{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png".
         L.tileLayer(
-          "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
+          "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
           {
             attribution: "&copy; OpenStreetMap &copy; CARTO",
             subdomains: "abcd",
@@ -330,10 +330,10 @@ export function CameraMap({ cameras }: CameraMapProps) {
   }, [cameras]);
 
   return (
-    <div className="relative h-full min-h-[360px] overflow-hidden rounded-2xl border border-ink-100 bg-ink-50 shadow-e1 lg:min-h-[500px]">
+    <div className="relative h-full min-h-[360px] overflow-hidden rounded-2xl bg-carbon-900 shadow-hair lg:min-h-[500px]">
       <div ref={mapElementRef} className="absolute inset-0" />
       {failed ? (
-        <div className="absolute inset-0 flex items-center justify-center p-6 text-center text-sm text-ink-500">
+        <div className="absolute inset-0 flex items-center justify-center p-6 text-center text-sm text-carbon-400">
           Não foi possível carregar o mapa interativo agora.
         </div>
       ) : null}

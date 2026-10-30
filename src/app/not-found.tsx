@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowLeft, VideoOff } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { Footer } from "@/components/proxlive/Footer";
 import { Navbar } from "@/components/proxlive/Navbar";
 
@@ -14,20 +14,29 @@ export default function NotFound() {
       <Navbar />
       <main
         id="conteudo"
-        className="proxlive-container flex min-h-[52vh] flex-col items-center justify-center py-20 text-center"
+        className="shell relative flex min-h-[70vh] flex-col justify-center overflow-hidden py-28"
       >
-        <span className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-50 text-brand-500 ring-1 ring-inset ring-brand-500/10">
-          <VideoOff className="h-6 w-6" strokeWidth={1.8} />
+        <span
+          aria-hidden="true"
+          className="ghost-type pointer-events-none absolute left-0 top-1/2 -translate-y-1/2 text-[clamp(7rem,28vw,24rem)]"
+        >
+          404
         </span>
-        <h1 className="mt-6 text-title text-ink-900">Página não encontrada</h1>
-        <p className="prose-measure mt-3 text-center">
-          A câmera ou o endereço que você tentou abrir não existe mais. Volte
-          para a home e veja as transmissões que estão no ar agora.
-        </p>
-        <Link href="/" className="btn btn-md btn-primary mt-8">
-          <ArrowLeft className="h-4 w-4" />
-          Ver câmeras ao vivo
-        </Link>
+
+        <div className="relative max-w-xl">
+          <span className="eyebrow">Erro 404</span>
+          <h1 className="mt-5 text-display text-balance text-white">
+            Essa página saiu do ar.
+          </h1>
+          <p className="prose-measure mt-6">
+            O endereço que você tentou abrir não existe mais. Volte para o
+            início e veja o que está transmitindo agora.
+          </p>
+          <Link href="/" className="btn btn-md btn-solid mt-9">
+            <ArrowLeft className="h-4 w-4" />
+            Voltar ao início
+          </Link>
+        </div>
       </main>
       <Footer />
     </>

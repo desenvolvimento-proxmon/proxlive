@@ -229,3 +229,97 @@ export function getLiveCameras() {
 export function getFeaturedCamera() {
   return getLiveCameras()[0] ?? cameras[0];
 }
+
+/* ------------------------------------------------------------------ */
+/* Lugares                                                             */
+/* ------------------------------------------------------------------ */
+
+/**
+ * Um lugar e o protagonista do site: ele reune as cameras daquele ponto e o
+ * conteudo que so faz sentido ali — agenda, o projeto, a tecnologia instalada.
+ * As cameras sozinhas nao sustentam uma pagina; o lugar sustenta.
+ */
+export type AgendaItem = {
+  id: string;
+  date: string;
+  title: string;
+  detail?: string;
+};
+
+export type TechItem = {
+  id: string;
+  title: string;
+  description: string;
+};
+
+export type Place = {
+  slug: string;
+  name: string;
+  /** Usado no tipo fantasma do fundo — curto funciona melhor. */
+  shortName: string;
+  location: string;
+  city: string;
+  state: string;
+  tagline: string;
+  about: string;
+  /** Camera que aparece como imagem heroica do hub. */
+  heroCamera: string;
+  cameraSlugs: string[];
+  agenda: AgendaItem[];
+  tech: TechItem[];
+};
+
+export const places: Place[] = [
+  {
+    slug: "autodromo",
+    name: "Autódromo de Chapecó",
+    shortName: "Autódromo",
+    location: "Chapecó - SC",
+    city: "Chapecó",
+    state: "SC",
+    tagline: "A pista ao vivo, 24 horas por dia.",
+    // CONTEUDO PROVISORIO — substituir pelo texto real do projeto
+    about: `Câmeras instaladas no Autódromo de Chapecó transmitem a pista ao vivo, sem custo e sem cadastro.
+
+Acompanhe o movimento em tempo real, de qualquer lugar, pelo computador ou pelo celular.`,
+    heroCamera: "autodromo-panoramica",
+    cameraSlugs: ["autodromo-panoramica", "autodromo-ptz"],
+    // CONTEUDO PROVISORIO — substituir pelo calendario real
+    agenda: [],
+    // CONTEUDO PROVISORIO — substituir pela tecnologia realmente instalada
+    tech: [
+      {
+        id: "ao-vivo",
+        title: "Transmissão ao vivo",
+        description:
+          "Duas lentes cobrindo a pista, com sinal entregue em tempo real pelo nosso próprio servidor de mídia."
+      },
+      {
+        id: "panoramica",
+        title: "Visão panorâmica",
+        description:
+          "Lente grande-angular que cobre uma faixa ampla do traçado num único enquadramento."
+      },
+      {
+        id: "movel",
+        title: "Lente móvel",
+        description:
+          "Câmera com movimento, para acompanhar pontos específicos da pista."
+      }
+    ]
+  }
+];
+
+export function getPlaceBySlug(slug: string) {
+  return places.find((place) => place.slug === slug);
+}
+
+export function getPlaceCameras(place: Place) {
+  return place.cameraSlugs
+    .map((slug) => getCameraBySlug(slug))
+    .filter((camera): camera is Camera => Boolean(camera));
+}
+
+export function getPlaceOfCamera(slug: string) {
+  return places.find((place) => place.cameraSlugs.includes(slug));
+}

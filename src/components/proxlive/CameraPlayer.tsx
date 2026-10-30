@@ -82,7 +82,7 @@ export function CameraPlayer({ camera, className = "" }: CameraPlayerProps) {
   if (!streamUrl) {
     return (
       <div
-        className={`relative h-full w-full overflow-hidden bg-ink-950 ${className}`}
+        className={`relative h-full w-full overflow-hidden bg-carbon-950 ${className}`}
       >
         <Image
           src={camera.image}
@@ -92,7 +92,7 @@ export function CameraPlayer({ camera, className = "" }: CameraPlayerProps) {
           sizes="(min-width: 1024px) 70vw, 100vw"
           className="object-cover opacity-60"
         />
-        <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-ink-950/55 p-6 text-center">
+        <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-carbon-950/55 p-6 text-center">
           <span className="rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-white/90 backdrop-blur">
             Em breve
           </span>
@@ -107,7 +107,7 @@ export function CameraPlayer({ camera, className = "" }: CameraPlayerProps) {
   // Fonte que não é HLS (player de terceiro) continua embutida via iframe.
   if (!isHlsUrl(streamUrl)) {
     return (
-      <div className={`relative h-full w-full bg-ink-950 ${className}`}>
+      <div className={`relative h-full w-full bg-carbon-950 ${className}`}>
         <iframe
           src={streamUrl}
           title={`Transmissão da câmera ${camera.name}`}
@@ -120,16 +120,16 @@ export function CameraPlayer({ camera, className = "" }: CameraPlayerProps) {
 
   const showSpinner = status === "loading" || status === "idle";
   const controlClass =
-    "proxlive-focus-dark inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/15 bg-ink-950/50 text-white backdrop-blur-md transition-[background-color,border-color,transform] duration-200 ease-out-quint hover:scale-105 hover:border-white/30 hover:bg-ink-950/75";
+    "focus-ring inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/15 bg-carbon-950/50 text-white backdrop-blur-md transition-[background-color,border-color,transform] duration-200 ease-out-quint hover:scale-105 hover:border-white/30 hover:bg-carbon-950/75";
 
   return (
     <div
       ref={containerRef}
-      className={`group relative h-full w-full overflow-hidden bg-ink-950 ${className}`}
+      className={`group relative h-full w-full overflow-hidden bg-carbon-950 ${className}`}
     >
       <video
         ref={videoRef}
-        className="h-full w-full bg-ink-950 object-contain"
+        className="h-full w-full bg-carbon-950 object-contain"
         muted
         playsInline
         autoPlay
@@ -153,7 +153,7 @@ export function CameraPlayer({ camera, className = "" }: CameraPlayerProps) {
       </div>
 
       {/* Barra de controles: aparece no hover e sempre no toque. */}
-      <div className="absolute inset-x-0 bottom-0 flex items-center justify-end gap-2 bg-gradient-to-t from-ink-950/85 via-ink-950/40 to-transparent p-4 opacity-100 transition-opacity duration-200 lg:opacity-0 lg:group-hover:opacity-100 lg:group-focus-within:opacity-100">
+      <div className="absolute inset-x-0 bottom-0 flex items-center justify-end gap-2 bg-gradient-to-t from-carbon-950/85 via-carbon-950/40 to-transparent p-4 opacity-100 transition-opacity duration-200 lg:opacity-0 lg:group-hover:opacity-100 lg:group-focus-within:opacity-100">
         <button
           type="button"
           onClick={toggleMute}
@@ -185,7 +185,7 @@ export function CameraPlayer({ camera, className = "" }: CameraPlayerProps) {
         <button
           type="button"
           onClick={toggleMute}
-          className="proxlive-focus-dark animate-fade-in absolute bottom-4 left-4 inline-flex items-center gap-2 rounded-full bg-white/95 px-3.5 py-2 text-xs font-semibold text-ink-900 shadow-e3 backdrop-blur transition-[background-color,transform] duration-200 ease-out-quint hover:-translate-y-0.5 hover:bg-white"
+          className="focus-ring animate-fade-in absolute bottom-4 left-4 inline-flex items-center gap-2 rounded-full bg-white/95 px-3.5 py-2 text-xs font-semibold text-carbon-950 shadow-lift backdrop-blur transition-[background-color,transform] duration-200 ease-out-quint hover:-translate-y-0.5 hover:bg-white"
         >
           <VolumeX className="h-3.5 w-3.5" />
           Ativar som
@@ -193,13 +193,13 @@ export function CameraPlayer({ camera, className = "" }: CameraPlayerProps) {
       ) : null}
 
       {showSpinner ? (
-        <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-ink-950/40 backdrop-blur-[2px]">
+        <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-carbon-950/40 backdrop-blur-[2px]">
           <Loader2 className="h-7 w-7 animate-spin text-white/70" />
         </div>
       ) : null}
 
       {status === "error" ? (
-        <div className="animate-fade-in absolute inset-0 flex flex-col items-center justify-center gap-4 bg-ink-950/88 p-6 text-center backdrop-blur-sm">
+        <div className="animate-fade-in absolute inset-0 flex flex-col items-center justify-center gap-4 bg-carbon-950/88 p-6 text-center backdrop-blur-sm">
           <span className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-amber-400/10 ring-1 ring-amber-400/30">
             <AlertTriangle className="h-5 w-5 text-amber-400" />
           </span>
@@ -215,7 +215,7 @@ export function CameraPlayer({ camera, className = "" }: CameraPlayerProps) {
           <button
             type="button"
             onClick={retry}
-            className="btn btn-sm btn-on-dark-solid"
+            className="btn btn-sm btn-solid"
           >
             <RotateCw className="h-3.5 w-3.5" />
             Tentar de novo

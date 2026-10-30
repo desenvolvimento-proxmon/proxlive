@@ -1,82 +1,100 @@
-import { Map } from "lucide-react";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 import { AdSlot } from "@/components/proxlive/AdSlot";
-import { CameraGrid } from "@/components/proxlive/CameraGrid";
 import { CameraMap } from "@/components/proxlive/CameraMap";
 import { Footer } from "@/components/proxlive/Footer";
-import { HeroSlider } from "@/components/proxlive/HeroSlider";
-import { HorizontalAd } from "@/components/proxlive/HorizontalAd";
+import { LiveHero } from "@/components/proxlive/LiveHero";
 import { Navbar } from "@/components/proxlive/Navbar";
+import { PlaceCard } from "@/components/proxlive/PlaceCard";
 import { Reveal } from "@/components/proxlive/Reveal";
-import { SectionTitle } from "@/components/proxlive/SectionTitle";
-import { SoftwareSection } from "@/components/proxlive/SoftwareSection";
+import { Section } from "@/components/proxlive/Section";
 import {
   cameras,
+  getCameraBySlug,
   getLiveCameras,
-  heroSlides,
-  horizontalAds,
-  sideAds,
-  softwareSection
+  getPlaceCameras,
+  places,
+  sideAds
 } from "@/lib/proxlive-data";
 
 export default function HomePage() {
   const liveCount = getLiveCameras().length;
+  const first = places[0];
+  const hero = first ? getCameraBySlug(first.heroCamera) : undefined;
 
   return (
     <>
       <Navbar />
       <main id="conteudo">
-        <HeroSlider slides={heroSlides} />
+        {hero ? (
+          <LiveHero
+            camera={hero}
+            ghost="AO VIVO"
+            eyebrow={`${liveCount} ${liveCount === 1 ? "câmera" : "câmeras"} transmitindo agora`}
+            title={
+              <>
+                O que está
+                <br />
+                acontecendo agora.
+              </>
+            }
+            subtitle="Câmeras abertas, em tempo real, sem cadastro e sem instalar nada. Escolha um lugar e assista."
+          >
+            <Link href={`/lugar/${first.slug}`} className="btn btn-md btn-solid">
+              Ver o {first.shortName}
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </LiveHero>
+        ) : null}
 
-        <section id="cameras" className="proxlive-container scroll-mt-24 py-14">
-          <Reveal>
-            {/* h1 da Home: é o assunto real da página para a busca. */}
-            <SectionTitle
-              as="h1"
-              meta={
-                <span className="inline-flex items-center gap-1.5 text-xs font-medium text-ink-500">
-                  <span className="h-1.5 w-1.5 animate-live-pulse rounded-full bg-proxlive-live" />
-                  {liveCount} no ar agora
-                </span>
-              }
-            >
-              Câmeras ao vivo
-            </SectionTitle>
-          </Reveal>
-          <CameraGrid cameras={cameras} />
-        </section>
-
-        <Reveal as="section" className="proxlive-container pb-14">
-          <HorizontalAd ad={horizontalAds[0]} placement="home_below_grid" />
-        </Reveal>
-
-        <section
-          id="mapa-cameras"
-          className="proxlive-container scroll-mt-24 pb-16"
+        <Section
+          id="lugares"
+          eyebrow="Lugares"
+          title="Onde estamos"
+          description="Cada lugar reúne suas câmeras e o que acontece por lá."
+          className="pt-4"
         >
-          <Reveal>
-            <SectionTitle icon={Map}>Mapa de câmeras</SectionTitle>
-          </Reveal>
-          <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_280px]">
-            {/* h-full: o mapa acompanha a altura da coluna de anúncios,
-                para as duas colunas terminarem alinhadas. */}
+          <div className="space-y-6">
+            {places.map((place, index) => {
+              const placeCameras = getPlaceCameras(place);
+              const placeHero = getCameraBySlug(place.heroCamera);
+
+              if (!placeHero) {
+                return null;
+              }
+
+              return (
+                <Reveal key={place.slug} delay={index * 90}>
+                  <PlaceCard
+                    place={place}
+                    hero={placeHero}
+                    cameraCount={placeCameras.length}
+                  />
+                </Reveal>
+              );
+            })}
+          </div>
+        </Section>
+
+        <Section
+          id="mapa"
+          eyebrow="Mapa"
+          title="Onde cada câmera está"
+          className="pt-10"
+        >
+          <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_300px]">
             <Reveal className="h-full min-w-0">
               <CameraMap cameras={cameras} />
             </Reveal>
-            <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-1">
-              {sideAds.map((ad, index) => (
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
+              {sideAds.slice(0, 3).map((ad, index) => (
                 <Reveal key={ad.id} delay={index * 80}>
-                  <AdSlot
-                    ads={[ad]}
-                    format="side"
-                    placement="home_map_sidebar"
-                  />
+                  <AdSlot ads={[ad]} format="side" placement="home_map_sidebar" />
                 </Reveal>
               ))}
             </div>
           </div>
-        </section>
-
-        <SoftwareSection section={softwareSection} />
+        </Section>
       </main>
       <Footer />
     </>

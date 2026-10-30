@@ -1,66 +1,38 @@
-import Image from "next/image";
 import Link from "next/link";
 
 type LogoProps = {
-  brand: "proxlive" | "proxmon";
   href?: string;
-  variant?: "dark" | "light";
   className?: string;
 };
 
-export function Logo({
-  brand,
-  href,
-  variant = "dark",
-  className = ""
-}: LogoProps) {
-  if (brand === "proxlive") {
-    const content = (
-      <Image
-        src="/images/brand/proxlive-logo.png"
-        alt="PROXLIVE"
-        width={3806}
-        height={703}
-        priority
-        className={`h-auto w-[190px] sm:w-[220px] ${className}`}
-      />
-    );
-
-    if (!href) {
-      return content;
-    }
-
-    return (
-      <Link
-        href={href}
-        aria-label="Ir para Home"
-        className="proxlive-focus inline-flex rounded-md"
-      >
-        {content}
-      </Link>
-    );
-  }
-
-  const textColor = variant === "light" ? "text-white" : "text-proxlive-navy";
-  const xColor = variant === "light" ? "text-white" : "text-proxlive-blue";
-  const content = (
+/**
+ * Marca em texto, nao em imagem.
+ *
+ * O PNG do PROXLIVE e azul-escuro sobre transparente e desapareceria no fundo
+ * preto. Filtrar para branco mataria o X azul, que e o unico tra\u00e7o da marca.
+ * Em texto ele fica nitido em qualquer tamanho e mantem o acento.
+ */
+export function Logo({ href, className = "" }: LogoProps) {
+  const mark = (
     <span
-      className={`inline-flex items-center text-3xl font-black leading-none sm:text-4xl ${textColor} ${className}`}
-      aria-label="PROXMON"
+      aria-label="PROXLIVE"
+      className={`inline-flex select-none items-center text-[1.3rem] font-extrabold leading-none tracking-[-0.045em] text-white sm:text-[1.45rem] ${className}`}
     >
-      <span>PRO</span>
-      <span className={xColor}>X</span>
-      <span>MON</span>
+      <span aria-hidden="true">PRO</span>
+      <span aria-hidden="true" className="text-brand-500">
+        X
+      </span>
+      <span aria-hidden="true">LIVE</span>
     </span>
   );
 
   if (!href) {
-    return content;
+    return mark;
   }
 
   return (
-    <Link href={href} aria-label="PROXMON">
-      {content}
+    <Link href={href} aria-label="Ir para a home" className="focus-ring -my-2 inline-flex items-center rounded py-2">
+      {mark}
     </Link>
   );
 }

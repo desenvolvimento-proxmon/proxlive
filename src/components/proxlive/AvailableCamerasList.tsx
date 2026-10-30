@@ -45,9 +45,9 @@ export function AvailableCamerasList({
             <Link
               key={camera.id}
               href={`/camera/${camera.slug}`}
-              className="proxlive-focus-dark group grid grid-cols-[84px_1fr] items-center gap-3 rounded-xl border border-transparent p-1.5 transition-colors duration-200 hover:border-white/15 hover:bg-white/[0.06]"
+              className="focus-ring group grid grid-cols-[84px_1fr] items-center gap-3 rounded-xl border border-transparent p-1.5 transition-colors duration-200 hover:border-white/15 hover:bg-white/[0.06]"
             >
-              <div className="relative aspect-video overflow-hidden rounded-lg bg-ink-900">
+              <div className="relative aspect-video overflow-hidden rounded-lg bg-carbon-800">
                 <Image
                   src={camera.image}
                   alt=""
@@ -62,7 +62,7 @@ export function AvailableCamerasList({
                 </span>
               </div>
               <div className="min-w-0">
-                <h3 className="truncate text-[13px] font-semibold leading-tight text-white transition-colors group-hover:text-brand-300">
+                <h3 className="truncate text-[13px] font-semibold leading-tight text-white transition-colors group-hover:text-brand-400">
                   {camera.name}
                 </h3>
                 <p className="mt-0.5 truncate text-[11px] leading-snug text-white/60">

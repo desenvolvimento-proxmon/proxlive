@@ -145,7 +145,7 @@ export function AdSlot({
   );
 
   const body = (
-    <div className="overflow-hidden rounded-xl border border-ink-100 bg-ink-50 transition-[border-color,box-shadow,transform] duration-300 ease-out-quint group-hover/ad:-translate-y-0.5 group-hover/ad:border-brand-200 group-hover/ad:shadow-e2">
+    <div className="overflow-hidden rounded-2xl bg-carbon-900 shadow-hair transition-[box-shadow,transform] duration-500 ease-out-quint group-hover/ad:-translate-y-1 group-hover/ad:shadow-hair-strong">
       {creative}
     </div>
   );
@@ -155,17 +155,17 @@ export function AdSlot({
       {/* Identificação exigida para conteúdo pago e boa prática de UX. */}
       <div className="mb-2 flex items-center gap-2.5">
         {/* Aviso obrigatório: precisa ser discreto, mas legível (AA). */}
-        <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-ink-500">
+        <span className="eyebrow">
           Publicidade
         </span>
-        <span aria-hidden="true" className="h-px flex-1 bg-ink-100" />
+        <span aria-hidden="true" className="h-px flex-1 bg-white/[0.08]" />
         {ads.length > 1 ? (
           <span className="flex gap-1" aria-hidden="true">
             {ads.map((item, itemIndex) => (
               <span
                 key={item.id}
                 className={`h-1 w-3 rounded-full transition-colors duration-300 ${
-                  itemIndex === index ? "bg-brand-500" : "bg-ink-200"
+                  itemIndex === index ? "bg-white" : "bg-white/20"
                 }`}
               />
             ))}
@@ -186,7 +186,7 @@ export function AdSlot({
               format
             })
           }
-          className="proxlive-focus group/ad block rounded-xl"
+          className="focus-ring group/ad block rounded-2xl"
         >
           {body}
         </a>

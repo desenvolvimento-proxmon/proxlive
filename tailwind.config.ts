@@ -10,24 +10,24 @@ const config: Config = {
     extend: {
       colors: {
         /**
-         * Escala neutra fria unica do projeto. Substitui a mistura anterior de
-         * `neutral-*` (cinza puro), `#111827` e tons soltos — cinza puro ao lado
-         * de azul deixava a interface com aparencia remendada.
+         * Rampa grafite do tema escuro editorial. Levemente azulada em vez de
+         * cinza puro — cinza neutro sobre preto fica sujo.
          */
-        ink: {
-          50: "#f6f8fb",
-          100: "#eef1f7",
-          200: "#dee4ef",
-          300: "#c4cddf",
-          400: "#909db8",
-          500: "#65728d",
-          600: "#4b566e",
-          700: "#374156",
-          800: "#1f2940",
-          900: "#131c2e",
-          950: "#0a1120"
+        carbon: {
+          50: "#f5f6f8",
+          100: "#e6e8ed",
+          200: "#c6cad5",
+          300: "#99a0b0",
+          400: "#838b9b",
+          500: "#4b5260",
+          600: "#343a46",
+          700: "#252a34",
+          800: "#191d25",
+          850: "#13161c",
+          900: "#0e1015",
+          950: "#08090d"
         },
-        /** Azul da marca. O 500 e o #0072ff original. */
+        /** Acento unico, usado com parcimonia. */
         brand: {
           50: "#eaf2ff",
           100: "#d4e5ff",
@@ -36,10 +36,9 @@ const config: Config = {
           400: "#4d9bff",
           500: "#0072ff",
           600: "#005ed6",
-          700: "#004aa8",
-          800: "#003b85",
-          900: "#002a5e"
+          700: "#004aa8"
         },
+        live: "#ff3b30",
         proxlive: {
           blue: "#0072ff",
           "blue-soft": "#4d9bff",
@@ -51,58 +50,64 @@ const config: Config = {
         sans: ["var(--font-inter)", "ui-sans-serif", "system-ui", "sans-serif"]
       },
       fontSize: {
-        // Titulos grandes precisam de tracking negativo para nao parecerem soltos.
+        /** Escala editorial: o nome domina, o resto sussurra. */
+        hero: [
+          "clamp(2.75rem, 1.2rem + 7vw, 8rem)",
+          { lineHeight: "0.92", letterSpacing: "-0.045em", fontWeight: "800" }
+        ],
         display: [
-          "clamp(1.85rem, 1.15rem + 2.6vw, 3rem)",
-          { lineHeight: "1.08", letterSpacing: "-0.032em", fontWeight: "700" }
+          "clamp(2rem, 1.2rem + 3.6vw, 4.25rem)",
+          { lineHeight: "1.02", letterSpacing: "-0.038em", fontWeight: "700" }
         ],
         title: [
-          "clamp(1.45rem, 1.1rem + 1.4vw, 2.1rem)",
-          { lineHeight: "1.15", letterSpacing: "-0.026em", fontWeight: "700" }
+          "clamp(1.5rem, 1.1rem + 1.6vw, 2.25rem)",
+          { lineHeight: "1.12", letterSpacing: "-0.028em", fontWeight: "700" }
+        ],
+        /** Rotulos pequenos em caixa alta, muito espacados. */
+        eyebrow: [
+          "0.6875rem",
+          { lineHeight: "1", letterSpacing: "0.18em", fontWeight: "600" }
         ],
         lead: ["1.0625rem", { lineHeight: "1.65", letterSpacing: "-0.006em" }]
       },
       transitionTimingFunction: {
         "out-expo": "cubic-bezier(0.16, 1, 0.3, 1)",
         "out-quint": "cubic-bezier(0.22, 1, 0.36, 1)",
-        "soft": "cubic-bezier(0.4, 0, 0.2, 1)"
+        soft: "cubic-bezier(0.4, 0, 0.2, 1)"
       },
       boxShadow: {
-        // Elevacao em 4 niveis, com sombra levemente azulada em vez de preto puro.
-        e1: "0 1px 2px rgba(10,17,32,0.04), 0 1px 3px rgba(10,17,32,0.06)",
-        e2: "0 2px 4px rgba(10,17,32,0.04), 0 8px 18px -8px rgba(10,17,32,0.12)",
-        e3: "0 4px 8px -2px rgba(10,17,32,0.06), 0 18px 34px -14px rgba(10,17,32,0.18)",
-        e4: "0 8px 18px -6px rgba(10,17,32,0.10), 0 34px 60px -24px rgba(10,17,32,0.28)",
-        "e3-brand":
-          "0 4px 8px -2px rgba(0,114,255,0.10), 0 18px 38px -16px rgba(0,114,255,0.42)",
-        "inset-hair": "inset 0 0 0 1px rgba(255,255,255,0.08)"
+        /** Sobre fundo escuro, profundidade vem de luz e contorno, nao de sombra. */
+        hair: "inset 0 0 0 1px rgba(255,255,255,0.07)",
+        "hair-strong": "inset 0 0 0 1px rgba(255,255,255,0.13)",
+        lift: "0 24px 60px -30px rgba(0,0,0,0.9)",
+        "lift-lg": "0 48px 110px -50px rgba(0,0,0,1)",
+        glow: "0 0 0 1px rgba(255,255,255,0.08), 0 40px 90px -50px rgba(0,114,255,0.55)"
       },
       keyframes: {
         "live-pulse": {
           "0%, 100%": { opacity: "1", transform: "scale(1)" },
-          "50%": { opacity: "0.4", transform: "scale(0.78)" }
+          "50%": { opacity: "0.35", transform: "scale(0.72)" }
         },
         "ken-burns": {
-          from: { transform: "scale(1.02)" },
-          to: { transform: "scale(1.09)" }
+          from: { transform: "scale(1.03)" },
+          to: { transform: "scale(1.12)" }
         },
-        "slide-progress": {
-          from: { transform: "scaleX(0)" },
-          to: { transform: "scaleX(1)" }
+        "fade-in": { from: { opacity: "0" }, to: { opacity: "1" } },
+        "scroll-cue": {
+          "0%, 100%": { transform: "translateY(0)", opacity: "0.35" },
+          "50%": { transform: "translateY(5px)", opacity: "1" }
         },
-        shimmer: {
-          "100%": { transform: "translateX(100%)" }
-        },
-        "fade-in": {
-          from: { opacity: "0" },
-          to: { opacity: "1" }
+        marquee: {
+          from: { transform: "translateX(0)" },
+          to: { transform: "translateX(-50%)" }
         }
       },
       animation: {
-        "live-pulse": "live-pulse 1.7s ease-in-out infinite",
-        "ken-burns": "ken-burns 14s ease-out forwards",
-        shimmer: "shimmer 1.9s infinite",
-        "fade-in": "fade-in 0.5s cubic-bezier(0.16, 1, 0.3, 1) both"
+        "live-pulse": "live-pulse 1.8s ease-in-out infinite",
+        "ken-burns": "ken-burns 26s ease-out forwards",
+        "fade-in": "fade-in 0.6s cubic-bezier(0.16,1,0.3,1) both",
+        "scroll-cue": "scroll-cue 2s ease-in-out infinite",
+        marquee: "marquee 38s linear infinite"
       }
     }
   },

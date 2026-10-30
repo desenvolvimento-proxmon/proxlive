@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 :root {
-  color-scheme: light;
+  color-scheme: dark;
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
 }
@@ -15,15 +15,15 @@
 html {
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
+  background: theme("colors.carbon.950");
 }
 
 body {
   min-height: 100vh;
-  background: #ffffff;
-  color: theme("colors.ink.800");
+  background: theme("colors.carbon.950");
+  color: theme("colors.carbon.100");
   font-family: var(--font-inter), ui-sans-serif, system-ui, -apple-system,
     BlinkMacSystemFont, "Segoe UI", sans-serif;
-  /* Alternativas de desenho do Inter: "1" de haste reta e "a" mais aberto. */
   font-feature-settings: "cv11", "ss01";
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -42,102 +42,134 @@ select {
 }
 
 ::selection {
-  background: rgba(0, 114, 255, 0.16);
+  background: rgba(0, 114, 255, 0.35);
+  color: #fff;
 }
 
 @layer components {
-  .proxlive-container {
-    @apply mx-auto w-full max-w-[1200px] px-5 sm:px-8 lg:px-10;
+  .shell {
+    @apply mx-auto w-full max-w-[1320px] px-5 sm:px-8 lg:px-12;
   }
 
-  /* ---- Botões -------------------------------------------------------- */
-  /* Um único sistema. Antes cada botão tinha altura e corpo de letra próprios. */
+  /* ---- Tipografia editorial ------------------------------------------ */
+
+  .eyebrow {
+    @apply text-eyebrow uppercase text-carbon-400;
+  }
+
+  /*
+   * Tipo fantasma: o nome gigante atrás do assunto, como o "DC" e o "MX"
+   * das referências. Marca o espaço sem disputar leitura.
+   */
+  .ghost-type {
+    @apply pointer-events-none select-none font-extrabold uppercase leading-none tracking-[-0.05em];
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.07);
+  }
+
+  .ghost-type-fill {
+    @apply pointer-events-none select-none font-extrabold uppercase leading-none tracking-[-0.05em] text-white/[0.035];
+  }
+
+  /* ---- Botões --------------------------------------------------------- */
 
   .btn {
     @apply relative inline-flex shrink-0 items-center justify-center gap-2
-      whitespace-nowrap rounded-lg font-semibold
-      transition-[background-color,box-shadow,transform,color,border-color]
-      duration-200 ease-out-quint
+      whitespace-nowrap rounded-full font-semibold
+      transition-[background-color,color,border-color,transform,box-shadow]
+      duration-300 ease-out-quint
       focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2
+      focus-visible:ring-white/70 focus-visible:ring-offset-carbon-950
       active:translate-y-px;
   }
 
   .btn-sm {
-    @apply h-9 px-3.5 text-[13px];
+    @apply h-10 px-5 text-[13px];
   }
 
   .btn-md {
-    @apply h-11 px-5 text-sm;
+    @apply h-12 px-7 text-sm;
   }
 
-  .btn-primary {
-    @apply bg-brand-500 text-white shadow-e2
-      hover:bg-brand-600 hover:shadow-e3-brand
-      focus-visible:ring-brand-500 focus-visible:ring-offset-white;
+  /* Contorno fino: o botão padrão das referências. */
+  .btn-outline {
+    @apply border border-white/25 text-white hover:border-white hover:bg-white hover:text-carbon-950;
   }
 
-  .btn-secondary {
-    @apply border border-ink-200 bg-white text-ink-700 shadow-e1
-      hover:border-ink-300 hover:bg-ink-50 hover:text-ink-900 hover:shadow-e2
-      focus-visible:ring-brand-500 focus-visible:ring-offset-white;
+  .btn-solid {
+    @apply bg-white text-carbon-950 hover:bg-carbon-100;
   }
 
-  /* Sobre superfície escura ou fotografia. */
-  .btn-on-dark {
-    @apply border border-white/25 bg-white/10 text-white backdrop-blur-md
-      hover:border-white/40 hover:bg-white/20
-      focus-visible:ring-white focus-visible:ring-offset-ink-950;
+  .btn-accent {
+    @apply bg-brand-500 text-white hover:bg-brand-600;
   }
 
-  .btn-on-dark-solid {
-    @apply bg-white text-ink-900 shadow-e2
-      hover:bg-ink-50 hover:shadow-e3
-      focus-visible:ring-white focus-visible:ring-offset-ink-950;
+  .btn-ghost {
+    @apply text-carbon-300 hover:text-white;
   }
 
-  /* ---- Superfícies --------------------------------------------------- */
+  /* ---- Superfícies ---------------------------------------------------- */
 
-  .surface-dark {
-    @apply bg-ink-950 text-white;
+  .panel {
+    @apply rounded-2xl bg-carbon-900 shadow-hair;
   }
 
-  /*
-   * Medida de leitura. O `ch` mede o glifo "0", mais largo que a média das
-   * minúsculas, então 62ch cai por volta de 70 caracteres reais por linha —
-   * dentro da faixa confortável de 45–75.
-   */
+  .panel-hover {
+    @apply transition-[background-color,box-shadow,transform] duration-500 ease-out-quint
+      hover:-translate-y-1 hover:bg-carbon-850 hover:shadow-hair-strong;
+  }
+
+  /* Chip flutuante ancorado na imagem, como "Intelligence" na referência. */
+  .pin {
+    @apply inline-flex items-center gap-2 rounded-full border border-white/15
+      bg-carbon-950/70 px-3.5 py-2 text-xs font-medium text-white backdrop-blur-xl;
+  }
+
   .prose-measure {
-    @apply max-w-[62ch] text-[0.9375rem] leading-[1.75] text-ink-600;
+    @apply max-w-[62ch] text-[0.9375rem] leading-[1.75] text-carbon-300;
   }
 
-  .hairline {
-    @apply border-ink-100;
+  .rule {
+    @apply h-px w-full bg-white/[0.08];
   }
 }
 
 @layer utilities {
-  .proxlive-focus {
+  .focus-ring {
     @apply focus-visible:outline-none focus-visible:ring-2
-      focus-visible:ring-brand-500 focus-visible:ring-offset-2
-      focus-visible:ring-offset-white;
+      focus-visible:ring-white/70 focus-visible:ring-offset-2
+      focus-visible:ring-offset-carbon-950;
   }
 
-  .proxlive-focus-dark {
-    @apply focus-visible:outline-none focus-visible:ring-2
-      focus-visible:ring-white/80 focus-visible:ring-offset-2
-      focus-visible:ring-offset-ink-950;
+  /* Escurece a base de uma imagem para o texto sobreposto ter contraste. */
+  .scrim-bottom {
+    background: linear-gradient(
+      to top,
+      rgba(8, 9, 13, 0.96) 0%,
+      rgba(8, 9, 13, 0.72) 28%,
+      rgba(8, 9, 13, 0.1) 62%,
+      transparent 100%
+    );
+  }
+
+  .scrim-left {
+    background: linear-gradient(
+      to right,
+      rgba(8, 9, 13, 0.94) 0%,
+      rgba(8, 9, 13, 0.6) 42%,
+      transparent 78%
+    );
   }
 }
 
-/* ---- Revelação no scroll --------------------------------------------- */
-/* Só opacidade e transform: ambos compostos na GPU, sem custo de layout. */
+/* ---- Revelação no scroll ---------------------------------------------- */
 
 .reveal {
   opacity: 0;
-  transform: translateY(14px);
+  transform: translateY(18px);
   transition:
-    opacity 0.7s var(--ease-out-expo),
-    transform 0.7s var(--ease-out-expo);
+    opacity 0.9s var(--ease-out-expo),
+    transform 0.9s var(--ease-out-expo);
   transition-delay: var(--reveal-delay, 0ms);
   will-change: opacity, transform;
 }
@@ -148,10 +180,7 @@ select {
   will-change: auto;
 }
 
-/*
- * Rede de segurança: sem JS o conteúdo nunca pode ficar invisível.
- * O script marca <html> assim que carrega; até lá, `.reveal` fica visível.
- */
+/* Sem JS o conteúdo nunca pode ficar invisível. */
 html:not(.js) .reveal {
   opacity: 1;
   transform: none;
@@ -162,7 +191,6 @@ html:not(.js) .reveal {
     scroll-behavior: auto;
   }
 
-  /* Precisa vencer o estado inicial de `.reveal`, não só zerar a transição. */
   .reveal,
   .reveal.is-visible {
     opacity: 1 !important;
@@ -180,63 +208,53 @@ html:not(.js) .reveal {
   }
 }
 
-/*
- * Usado via `style` no indicador do carrossel. O Tailwind só emite os
- * keyframes do tema quando existe uma classe `animate-*` correspondente,
- * então este precisa ser declarado aqui.
- */
-@keyframes slide-progress {
-  from {
-    transform: scaleX(0);
-  }
-  to {
-    transform: scaleX(1);
-  }
-}
-
-/* ---- Mapa ------------------------------------------------------------- */
+/* ---- Mapa -------------------------------------------------------------- */
 
 .leaflet-container {
   z-index: 0;
   min-height: 100%;
   font: inherit;
-  background: theme("colors.ink.100");
+  background: theme("colors.carbon.900");
 }
 
 .leaflet-popup-content-wrapper {
-  border-radius: 14px;
+  border-radius: 16px;
   padding: 6px;
-  box-shadow:
-    0 4px 8px -2px rgba(10, 17, 32, 0.08),
-    0 24px 48px -20px rgba(10, 17, 32, 0.35);
+  background: theme("colors.carbon.850");
+  color: theme("colors.carbon.100");
+  box-shadow: 0 30px 70px -35px rgba(0, 0, 0, 0.95);
+}
+
+.leaflet-popup-tip {
+  background: theme("colors.carbon.850");
+  box-shadow: none;
 }
 
 .leaflet-popup-content {
   margin: 8px;
 }
 
-.leaflet-popup-tip {
-  box-shadow: none;
-}
-
 .leaflet-control-attribution {
   font-size: 10px;
-  background: rgba(255, 255, 255, 0.78) !important;
+  background: rgba(14, 16, 21, 0.8) !important;
+  color: theme("colors.carbon.400");
   backdrop-filter: blur(4px);
-  color: theme("colors.ink.500");
 }
 
-/* O azul padrão do Leaflet (#0078A8) fica em 3.6:1 — abaixo de AA. */
 .leaflet-control-attribution a {
-  color: theme("colors.brand.700") !important;
+  color: theme("colors.carbon.300") !important;
 }
 
 .leaflet-bar a {
-  color: theme("colors.ink.700") !important;
-  border-bottom-color: theme("colors.ink.200") !important;
+  background: theme("colors.carbon.850") !important;
+  color: theme("colors.carbon.200") !important;
+  border-bottom-color: rgba(255, 255, 255, 0.08) !important;
 }
 
-/* Marcador das câmeras, com pulso indicando transmissão ao vivo. */
+.leaflet-bar a:hover {
+  background: theme("colors.carbon.700") !important;
+}
+
 .proxlive-marker {
   display: grid;
   place-items: center;
@@ -258,8 +276,8 @@ html:not(.js) .reveal {
   border-radius: 999px;
   background: #0072ff;
   color: #ffffff;
-  border: 2.5px solid #ffffff;
-  box-shadow: 0 6px 16px -4px rgba(0, 114, 255, 0.75);
+  border: 2.5px solid rgba(255, 255, 255, 0.92);
+  box-shadow: 0 8px 20px -6px rgba(0, 114, 255, 0.85);
   transition: transform 0.25s var(--ease-out-quint);
 }
 
