@@ -42,8 +42,13 @@ export type Camera = {
   summary: string;
   image: string;
   streamUrl?: string;
-  latitude: number;
-  longitude: number;
+  /**
+   * Ausentes em câmera que se move — veicular, por exemplo. Sem coordenada a
+   * câmera fica fora do mapa e sem `geo` nos dados estruturados, em vez de
+   * ganhar um pino parado onde ela não está.
+   */
+  latitude?: number;
+  longitude?: number;
 };
 
 /** Criativo de anúncio, comum aos formatos horizontal e lateral. */
