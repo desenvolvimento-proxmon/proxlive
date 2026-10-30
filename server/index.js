@@ -27,6 +27,8 @@ const SITE_ORIGIN = process.env.SITE_ORIGIN || "https://proxlive.com.br";
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN || "";
 const GITHUB_REPO = process.env.GITHUB_REPO || "";
 const DATA_FILE = process.env.DATA_FILE || path.join(__dirname, "data", "cameras.json");
+// Comando que o MediaMTX roda quando alguém abre uma câmera jt1078.
+const JT_DEMANDA_CMD = process.env.JT_DEMANDA_CMD || "/usr/bin/node /opt/proxlive-jt/demanda.js";
 
 if (!ADMIN_PASSWORD_HASH || !JWT_SECRET) {
   console.error(
@@ -145,7 +147,21 @@ function validarCamera(c) {
   if (!Number.isFinite(lat) || lat < -90 || lat > 90) erros.push("latitude inválida.");
   if (!Number.isFinite(lon) || lon < -180 || lon > 180) erros.push("longitude inválida.");
 
-  if (!["rtsp", "rtmp"].includes(c.tipo)) erros.push("tipo: use 'rtsp' ou 'rtmp'.");
+  if (!["rtsp", "rtmp", "jt1078"].includes(c.tipo)) {
+    erros.push("tipo: use 'rtsp', 'rtmp' ou 'jt1078'.");
+  }
+
+  if (c.tipo === "jt1078") {
+    // Câmera veicular em chip 4G, via ponte JT808/1078 (server/jt-gateway).
+    if (!/^\d{1,20}$/.test(String(c.terminal || ""))) {
+      erros.push("terminal: o Device ID/número do terminal configurado na câmera (só dígitos).");
+    }
+    const canal = Number(c.canal ?? 1);
+    if (!Number.isInteger(canal) || canal < 1 || canal > 32) erros.push("canal: de 1 a 32.");
+    if (c.fluxo != null && ![0, 1].includes(Number(c.fluxo))) {
+      erros.push("fluxo: 0 (principal) ou 1 (secundário, recomendado no 4G).");
+    }
+  }
 
   if (c.tipo === "rtsp") {
     // Só RTSP: impede que alguém use este campo para apontar a outro protocolo.
@@ -209,7 +225,8 @@ async function dispararRebuild() {
 /** Público: é daqui que o site lê as câmeras durante o build. */
 app.get("/api/cameras", (_req, res) => {
   // Nunca devolve a URL de origem: ela carrega a senha da câmera.
-  const publicas = lerCameras().map(({ sourceUrl, ...resto }) => resto);
+  // O número do terminal também fica de fora: é o que identifica o equipamento.
+  const publicas = lerCameras().map(({ sourceUrl, terminal, canal, fluxo, ...resto }) => resto);
   res.json(publicas);
 });
 
@@ -233,10 +250,21 @@ app.post("/api/cameras", exigirToken, async (req, res) => {
   }
 
   // 1) Cria o path no MediaMTX.
-  const config =
-    c.tipo === "rtsp"
-      ? { source: c.sourceUrl, sourceOnDemand: true, rtspTransport: "tcp" }
-      : { source: "publisher" };
+  let config;
+  if (c.tipo === "rtsp") {
+    config = { source: c.sourceUrl, sourceOnDemand: true, rtspTransport: "tcp" };
+  } else if (c.tipo === "jt1078") {
+    // Só pede o vídeo à câmera quando há espectador (poupa o plano de dados).
+    // O tempo de partida é maior porque a câmera precisa abrir a conexão no 4G.
+    config = {
+      source: "publisher",
+      runOnDemand: `${JT_DEMANDA_CMD} ${c.slug}`,
+      runOnDemandStartTimeout: "40s",
+      runOnDemandCloseAfter: "20s"
+    };
+  } else {
+    config = { source: "publisher" };
+  }
 
   try {
     await mediamtx("POST", `/v3/config/paths/add/${encodeURIComponent(c.slug)}`, config);
@@ -257,6 +285,9 @@ app.post("/api/cameras", exigirToken, async (req, res) => {
     longitude: Number(c.longitude),
     tipo: c.tipo,
     sourceUrl: c.tipo === "rtsp" ? c.sourceUrl : "",
+    ...(c.tipo === "jt1078"
+      ? { terminal: String(c.terminal), canal: Number(c.canal ?? 1), fluxo: Number(c.fluxo ?? 1) }
+      : {}),
     streamUrl: `https://stream.proxlive.com.br/${c.slug}/index.m3u8`,
     criadaEm: new Date().toISOString()
   };

@@ -102,3 +102,10 @@ Deve responder `{"ok":true}`.
   erro não diz se o que errou foi o usuário ou a senha.
 - **A escrita do JSON é atômica** (arquivo temporário + rename): uma queda no
   meio da gravação não corrompe o cadastro.
+
+## Câmeras veiculares em chip 4G (`tipo: "jt1078"`)
+
+Câmeras como a Hikvision G40 PRO no 4G não aceitam RTSP de fora (CGNAT).
+Elas entram pela ponte JT808/1078 em `server/jt-gateway/`, que tem o passo a
+passo próprio no `server/jt-gateway/README.md`. No cadastro, use
+`"tipo": "jt1078"` com `terminal` (Device ID da câmera), `canal` e `fluxo`.
