@@ -1,29 +1,31 @@
+import Image from "next/image";
 import Link from "next/link";
 
 type LogoProps = {
   href?: string;
+  /** Largura em pixels; a altura acompanha a proporção 2000x370. */
+  width?: number;
   className?: string;
+  priority?: boolean;
 };
 
-/**
- * Marca em texto, nao em imagem.
- *
- * O PNG do PROXLIVE e azul-escuro sobre transparente e desapareceria no fundo
- * preto. Filtrar para branco mataria o X azul, que e o unico tra\u00e7o da marca.
- * Em texto ele fica nitido em qualquer tamanho e mantem o acento.
- */
-export function Logo({ href, className = "" }: LogoProps) {
+export function Logo({
+  href,
+  width = 148,
+  className = "",
+  priority = false
+}: LogoProps) {
   const mark = (
-    <span
-      aria-label="PROXLIVE"
-      className={`inline-flex select-none items-center text-[1.3rem] font-extrabold leading-none tracking-[-0.045em] text-white sm:text-[1.45rem] ${className}`}
-    >
-      <span aria-hidden="true">PRO</span>
-      <span aria-hidden="true" className="text-brand-500">
-        X
-      </span>
-      <span aria-hidden="true">LIVE</span>
-    </span>
+    <Image
+      src="/images/brand/proxlive-logo-branca.webp"
+      alt="PROXLIVE"
+      width={2000}
+      height={370}
+      priority={priority}
+      sizes={`${width}px`}
+      style={{ width, height: "auto" }}
+      className={`select-none ${className}`}
+    />
   );
 
   if (!href) {
@@ -31,7 +33,11 @@ export function Logo({ href, className = "" }: LogoProps) {
   }
 
   return (
-    <Link href={href} aria-label="Ir para a home" className="focus-ring -my-2 inline-flex items-center rounded py-2">
+    <Link
+      href={href}
+      aria-label="Ir para a home"
+      className="focus-ring -my-2 inline-flex items-center rounded py-2"
+    >
       {mark}
     </Link>
   );

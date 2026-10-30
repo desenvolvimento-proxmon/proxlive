@@ -262,8 +262,8 @@ export type Place = {
   state: string;
   tagline: string;
   about: string;
-  /** Camera que aparece como imagem heroica do hub. */
-  heroCamera: string;
+  /** Camera que aparece como imagem heroica do hub. Vazio = ainda sem sinal. */
+  heroCamera?: string;
   cameraSlugs: string[];
   agenda: AgendaItem[];
   tech: TechItem[];
@@ -307,6 +307,22 @@ Acompanhe o movimento em tempo real, de qualquer lugar, pelo computador ou pelo 
           "Câmera com movimento, para acompanhar pontos específicos da pista."
       }
     ]
+  },
+  {
+    slug: "cataratas",
+    name: "Cataratas do Iguaçu",
+    shortName: "Cataratas",
+    location: "Foz do Iguaçu - PR",
+    city: "Foz do Iguaçu",
+    state: "PR",
+    tagline: "Em breve, ao vivo.",
+    // CONTEUDO PROVISORIO
+    about: `Estamos preparando a transmissão ao vivo das Cataratas do Iguaçu.
+
+Em breve você vai acompanhar em tempo real, de graça e sem cadastro.`,
+    cameraSlugs: [],
+    agenda: [],
+    tech: []
   }
 ];
 

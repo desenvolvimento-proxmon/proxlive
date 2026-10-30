@@ -1,8 +1,7 @@
 import Link from "next/link";
 import { ChevronRight, Map, MapPin } from "lucide-react";
-import type { AdCreative, Camera } from "@/lib/proxlive-data";
+import type { Camera } from "@/lib/proxlive-data";
 import { getPlaceOfCamera } from "@/lib/proxlive-data";
-import { AdSlot } from "./AdSlot";
 import { CameraCard } from "./CameraCard";
 import { CameraPlayer } from "./CameraPlayer";
 import { Reveal } from "./Reveal";
@@ -12,15 +11,11 @@ import { ShareButton } from "./ShareButton";
 type CameraDetailProps = {
   camera: Camera;
   cameras: Camera[];
-  horizontalAd: AdCreative;
-  sideAds: AdCreative[];
 };
 
 export function CameraDetail({
   camera,
-  cameras,
-  horizontalAd,
-  sideAds
+  cameras
 }: CameraDetailProps) {
   const live = Boolean(camera.streamUrl?.trim());
   const place = getPlaceOfCamera(camera.slug);
@@ -95,27 +90,10 @@ export function CameraDetail({
         eyebrow="Sobre"
         title="Este ponto"
         className="pt-14"
-        meta={
-          <div className="w-full sm:w-[300px]">
-            <AdSlot
-              ads={sideAds}
-              format="side"
-              placement="camera_detail_sidebar"
-            />
-          </div>
-        }
       >
         <div className="prose-measure whitespace-pre-line text-base">
           {camera.description}
         </div>
-
-        <Reveal className="mt-14">
-          <AdSlot
-            ads={[horizontalAd]}
-            format="horizontal"
-            placement="camera_detail_below_description"
-          />
-        </Reveal>
       </Section>
 
       {siblings.length > 0 ? (

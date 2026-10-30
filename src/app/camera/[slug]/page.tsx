@@ -5,8 +5,6 @@ import { Footer } from "@/components/proxlive/Footer";
 import { Navbar } from "@/components/proxlive/Navbar";
 import {
   cameras,
-  cameraDetailHorizontalAd,
-  cameraDetailSideAds,
   getCameraBySlug,
   isLive
 } from "@/lib/proxlive-data";
@@ -90,8 +88,6 @@ export default async function CameraPage({ params }: CameraPageProps) {
       <CameraDetail
         camera={camera}
         cameras={cameras}
-        horizontalAd={cameraDetailHorizontalAd}
-        sideAds={cameraDetailSideAds}
       />
       <Footer />
     </>

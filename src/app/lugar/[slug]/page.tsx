@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { CalendarDays, MapPin } from "lucide-react";
-import { AdSlot } from "@/components/proxlive/AdSlot";
 import { CameraCard } from "@/components/proxlive/CameraCard";
 import { Footer } from "@/components/proxlive/Footer";
 import { LiveHero } from "@/components/proxlive/LiveHero";
@@ -9,7 +8,6 @@ import { Navbar } from "@/components/proxlive/Navbar";
 import { Reveal } from "@/components/proxlive/Reveal";
 import { Section } from "@/components/proxlive/Section";
 import {
-  cameraDetailHorizontalAd,
   getCameraBySlug,
   getPlaceBySlug,
   getPlaceCameras,
@@ -34,7 +32,7 @@ export async function generateMetadata({
     return { title: "Lugar não encontrado" };
   }
 
-  const hero = getCameraBySlug(place.heroCamera);
+  const hero = place.heroCamera ? getCameraBySlug(place.heroCamera) : undefined;
   const title = `${place.name} ao vivo`;
   const description = `${place.tagline} Câmeras ao vivo em ${place.location}, sem cadastro.`;
 
@@ -60,7 +58,7 @@ export default async function PlacePage({ params }: PlacePageProps) {
     notFound();
   }
 
-  const hero = getCameraBySlug(place.heroCamera);
+  const hero = place.heroCamera ? getCameraBySlug(place.heroCamera) : undefined;
   const placeCameras = getPlaceCameras(place);
 
   return (
@@ -76,8 +74,33 @@ export default async function PlacePage({ params }: PlacePageProps) {
             title={place.name}
             subtitle={place.tagline}
           />
-        ) : null}
+        ) : (
+          /* Lugar anunciado e ainda sem sinal: topo tipografico, sem foto
+             emprestada de outro lugar. */
+          <section className="relative isolate flex min-h-[58vh] items-end overflow-hidden">
+            <div
+              aria-hidden="true"
+              className="absolute inset-0 -z-10 bg-[radial-gradient(90%_80%_at_15%_0%,rgba(0,114,255,0.14),transparent_60%)]"
+            />
+            <span
+              aria-hidden="true"
+              className="ghost-type absolute -bottom-[0.15em] left-0 -z-10 w-full text-[clamp(4rem,17vw,15rem)]"
+            >
+              {place.shortName}
+            </span>
+            <div className="shell relative w-full pb-14 pt-36">
+              <span className="eyebrow">{place.location}</span>
+              <h1 className="mt-5 text-hero text-balance text-white">
+                {place.name}
+              </h1>
+              <p className="mt-6 max-w-xl text-lead text-carbon-300">
+                {place.tagline}
+              </p>
+            </div>
+          </section>
+        )}
 
+        {placeCameras.length > 0 ? (
         <Section
           id="cameras"
           eyebrow="Ao vivo"
@@ -98,6 +121,7 @@ export default async function PlacePage({ params }: PlacePageProps) {
             ))}
           </div>
         </Section>
+        ) : null}
 
         {place.agenda.length > 0 ? (
           <Section
@@ -162,13 +186,6 @@ export default async function PlacePage({ params }: PlacePageProps) {
           </div>
         </Section>
 
-        <Reveal as="section" className="shell mt-20">
-          <AdSlot
-            ads={[cameraDetailHorizontalAd]}
-            format="horizontal"
-            placement={`lugar_${place.slug}`}
-          />
-        </Reveal>
       </main>
       <Footer />
     </>
