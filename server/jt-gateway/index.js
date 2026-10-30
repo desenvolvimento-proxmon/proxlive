@@ -53,22 +53,56 @@ if (!CFG.hostPublico) {
 /* Cadastro                                                             */
 /* ------------------------------------------------------------------ */
 
-/** Lê a câmera do mesmo cameras.json da API do PROXLIVE. */
-function acharCamera(slug) {
-  let lista = [];
+/*
+  O cameras.json é relido quando a data do arquivo muda: uma câmera
+  recém-cadastrada passa a ser aceita sem reiniciar a ponte, e o disco não é
+  tocado a cada pacote que chega.
+*/
+let cadastro = { mtime: 0, lista: [] };
+
+function lerCadastro() {
+  let mtime;
   try {
-    lista = JSON.parse(fs.readFileSync(CFG.arquivoCameras, "utf-8"));
+    mtime = fs.statSync(CFG.arquivoCameras).mtimeMs;
   } catch (e) {
     log("Não consegui ler", CFG.arquivoCameras, "-", e.message);
+    // Sem cadastro legível ninguém entra: é mais seguro do que abrir a porta.
+    return cadastro.lista;
   }
-  const c = lista.find((x) => x.slug === slug && x.tipo === "jt1078");
-  if (!c) return null;
-  return {
-    slug: c.slug,
-    terminal: jt808.normalizarTerminal(c.terminal),
-    canal: Number(c.canal || 1),
-    fluxo: Number(c.fluxo ?? 1)
-  };
+
+  if (mtime === cadastro.mtime) return cadastro.lista;
+
+  try {
+    const bruto = JSON.parse(fs.readFileSync(CFG.arquivoCameras, "utf-8"));
+    const lista = (Array.isArray(bruto) ? bruto : [])
+      .filter((c) => c && c.tipo === "jt1078")
+      .map((c) => ({
+        slug: c.slug,
+        terminal: jt808.normalizarTerminal(c.terminal),
+        canal: Number(c.canal || 1),
+        fluxo: Number(c.fluxo ?? 1)
+      }))
+      .filter((c) => c.slug && c.terminal);
+
+    cadastro = { mtime, lista };
+    debug(`cadastro relido: ${lista.length} câmera(s) jt1078`);
+  } catch (e) {
+    // Arquivo sendo gravado ou corrompido: segura o último cadastro bom, para
+    // não derrubar quem já está transmitindo.
+    log("cameras.json ilegível -", e.message, "- mantendo o cadastro anterior");
+  }
+
+  return cadastro.lista;
+}
+
+/** Lê a câmera do mesmo cameras.json da API do PROXLIVE. */
+function acharCamera(slug) {
+  return lerCadastro().find((c) => c.slug === slug) || null;
+}
+
+/** Há alguma câmera cadastrada com este terminal? */
+function terminalCadastrado(terminal) {
+  return lerCadastro().some((c) => c.terminal === terminal);
 }
 
 /* ------------------------------------------------------------------ */
@@ -76,6 +110,33 @@ function acharCamera(slug) {
 /* ------------------------------------------------------------------ */
 
 const sessoes = new Map(); // terminal normalizado → sessão
+
+// Terminais recusados há pouco, para a mesma tentativa não encher o log.
+const recusasRecentes = new Map();
+
+/**
+ * Fecha a conexão de quem não está no cadastro.
+ *
+ * O número do terminal vai para o log de proposito: é assim que se descobre o
+ * Device ID de uma câmera nova. Ligue a câmera apontando para cá, leia o log e
+ * cadastre o número que aparecer.
+ */
+function recusar(socket, origem, terminalBruto) {
+  const chave = jt808.normalizarTerminal(terminalBruto);
+  const agora = Date.now();
+
+  if (recusasRecentes.size > 500) recusasRecentes.clear();
+
+  if (agora - (recusasRecentes.get(chave) || 0) > 60000) {
+    recusasRecentes.set(chave, agora);
+    log(
+      `Recusei o terminal ${terminalBruto} vindo de ${origem}: não está no cadastro. ` +
+        `Se a câmera é sua, cadastre-a com tipo "jt1078" e terminal ${chave}.`
+    );
+  }
+
+  socket.destroy();
+}
 
 function enviar(sessao, id, corpo) {
   sessao.serialSaida = (sessao.serialSaida + 1) & 0xffff;
@@ -101,6 +162,14 @@ const servidorComandos = net.createServer((socket) => {
       const chave = jt808.normalizarTerminal(m.terminal);
 
       if (!sessao || sessao.terminal !== chave) {
+        // A porta de comandos fica exposta à internet por necessidade — é a
+        // câmera que liga para cá, e ela vive atrás de CGNAT. Sem esta
+        // conferência, qualquer um que alcance a porta abre sessão.
+        if (!terminalCadastrado(chave)) {
+          recusar(socket, origem, m.terminal);
+          return;
+        }
+
         const antiga = sessoes.get(chave);
         if (antiga && antiga.socket !== socket) antiga.socket.destroy();
         sessao = {

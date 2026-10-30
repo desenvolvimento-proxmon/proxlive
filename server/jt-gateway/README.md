@@ -140,6 +140,10 @@ curl -X POST https://stream.proxlive.com.br/api/cameras \
 ```
 
 - `terminal`: o Device ID da câmera (zeros à esquerda não importam).
+  **Só terminais cadastrados aqui conseguem abrir sessão na ponte.** Se você
+  não sabe o Device ID, ligue a câmera apontando para esta VPS e leia o log: o
+  número aparece na linha `Recusei o terminal ...`, pronto para cadastrar. O
+  cadastro é relido sozinho, sem reiniciar o serviço.
 - `canal`: 1 = câmera frontal, 2 = traseira/interna.
 - `fluxo`: 1 = secundário (recomendado no 4G), 0 = principal.
 
@@ -174,6 +178,8 @@ Feche a página: uns 20 s depois aparece `Transmissão encerrada: carro-01 (sem 
 | `câmera recusou 0x9101` | Canal inexistente; tente `canal` 1 |
 | `Codec desconhecido` / tela preta no navegador | Stream em H.265: mude o sub stream para H.264 |
 | `Vídeo não solicitado` | O `terminal` do cadastro não bate com o Device ID da câmera |
+| `Recusei o terminal N` | Esse Device ID não está no `cameras.json`. Cadastre-o (passo 5) ou confira se digitou certo |
+| Nenhuma câmera conecta, log diz `Não consegui ler` | `DATA_FILE` aponta para o lugar errado. Sem cadastro legível a ponte não aceita ninguém, de propósito |
 
 Para ver tudo o que a câmera manda: `LOG=debug` no `.env` e
 `systemctl restart proxlive-jt`.
@@ -189,7 +195,17 @@ node teste/simulador.js video.h264 127.0.0.1 7611 012345678901 2013 15
 
 ## Segurança
 
+As portas 7611 e 7612 ficam abertas para a internet por necessidade: a câmera
+vive atrás de CGNAT, então é ela que liga para cá. Por isso a ponte não confia
+em quem conecta:
+
+- Só abre sessão para **terminal que está no `cameras.json`**; qualquer outro é
+  desconectado na primeira mensagem, com o número registrado no log.
 - Só aceita vídeo de câmera que **foi pedida**: conexão de vídeo sem pedido é fechada.
 - O controle (`/iniciar`, `/parar`, `/estado`) só escuta em `127.0.0.1`.
 - O número do terminal não sai na rota pública `GET /api/cameras`.
 - O áudio não é pedido (`tipoDados = 1`): o site toca sem som, e isso economiza dados.
+
+Vale somar a isso uma regra de firewall limitando as duas portas à faixa de IPs
+da operadora do chip — a conferência do terminal já barra o acesso, mas o
+firewall evita até o custo de tratar a conexão.
