@@ -21,12 +21,11 @@ export default function HomePage() {
           <HeroX />
 
           <div className="shell relative w-full py-32 text-center">
-            {/* TEXTO PROVISORIO — a frase definitiva entra aqui */}
             <h1 className="mx-auto max-w-2xl text-hero text-balance font-display text-white">
-              Lugares que você pode ver agora
+              Conecte-se ao que acontece agora
             </h1>
             <p className="mx-auto mt-5 max-w-md text-sm leading-relaxed text-carbon-400">
-              Câmeras ao vivo, abertas, em tempo real.
+              Acesse câmeras ao vivo e acompanhe o que importa para você, de onde estiver.
             </p>
           </div>
         </section>
