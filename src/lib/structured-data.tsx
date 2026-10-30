@@ -69,11 +69,17 @@ export function liveCameraSchema(camera: Camera): Schema {
     contentLocation: {
       "@type": "Place",
       name: camera.location,
-      geo: {
-        "@type": "GeoCoordinates",
-        latitude: camera.latitude,
-        longitude: camera.longitude
-      }
+      // Só declara coordenada quando ela existe: afirmar um ponto fixo para
+      // câmera que se move seria dado errado no resultado de busca.
+      ...(Number.isFinite(camera.latitude) && Number.isFinite(camera.longitude)
+        ? {
+            geo: {
+              "@type": "GeoCoordinates",
+              latitude: camera.latitude,
+              longitude: camera.longitude
+            }
+          }
+        : {})
     }
   };
 }

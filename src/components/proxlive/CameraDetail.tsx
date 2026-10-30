@@ -18,6 +18,9 @@ export function CameraDetail({
   cameras
 }: CameraDetailProps) {
   const live = Boolean(camera.streamUrl?.trim());
+  // Câmera que se move não está no mapa: o botão levaria a lugar nenhum.
+  const noMapa =
+    Number.isFinite(camera.latitude) && Number.isFinite(camera.longitude);
   const place = getPlaceOfCamera(camera.slug);
   const siblings = cameras.filter((item) => item.slug !== camera.slug);
 
@@ -72,10 +75,12 @@ export function CameraDetail({
           </div>
 
           <div className="flex flex-wrap gap-2.5">
-            <Link href="/#mapa" className="btn btn-sm btn-outline">
-              <Map className="h-4 w-4" />
-              Ver no mapa
-            </Link>
+            {noMapa ? (
+              <Link href="/#mapa" className="btn btn-sm btn-outline">
+                <Map className="h-4 w-4" />
+                Ver no mapa
+              </Link>
+            ) : null}
             <ShareButton
               title={`Câmera ao vivo — ${camera.name}`}
               text={camera.summary}

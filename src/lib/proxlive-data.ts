@@ -42,8 +42,13 @@ export type Camera = {
   summary: string;
   image: string;
   streamUrl?: string;
-  latitude: number;
-  longitude: number;
+  /**
+   * Ausentes em câmera que se move — veicular, por exemplo. Sem coordenada a
+   * câmera fica fora do mapa e sem `geo` nos dados estruturados, em vez de
+   * ganhar um pino parado onde ela não está.
+   */
+  latitude?: number;
+  longitude?: number;
 };
 
 /** Criativo de anúncio, comum aos formatos horizontal e lateral. */
@@ -127,6 +132,24 @@ A lente grande-angular cobre uma faixa ampla da pista num único enquadramento.`
     streamUrl: "https://stream.proxlive.com.br/autodromo-pano/index.m3u8",
     latitude: -27.1082,
     longitude: -52.6069
+  },
+  {
+    id: "5",
+    slug: "carro-01",
+    name: "Carro 01",
+    location: "Autódromo de Chapecó - SC",
+    city: "Chapecó",
+    category: "Autódromo",
+    summary: "Câmera veicular ao vivo no autódromo de Chapecó.",
+    description: `Câmera embarcada em veículo, transmitindo por chip 4G.
+
+O sinal só é pedido ao veículo enquanto alguém está assistindo.`,
+    // Quadro congelado da própria câmera: ela é sob demanda, então não existe
+    // miniatura contínua em /thumbs como nas câmeras fixas.
+    image: "/images/cameras/carro-01.jpg",
+    streamUrl: "https://stream.proxlive.com.br/carro-01/index.m3u8"
+    // Sem latitude/longitude de propósito: a câmera se move, então fica fora
+    // do mapa em vez de ganhar um pino parado onde ela não está.
   }
 ];
 
@@ -306,7 +329,7 @@ O sistema conta com inteligência artificial capaz de identificar automaticament
 
 Para integrar toda a operação, foi desenvolvido um software exclusivo para o autódromo, com mapeamento da pista, monitoramento de ativos e eventos e dashboards, operado a partir de uma central de controle dedicada.`,
     heroCamera: "autodromo-panoramica",
-    cameraSlugs: ["autodromo-panoramica", "autodromo-ptz"],
+    cameraSlugs: ["autodromo-panoramica", "autodromo-ptz", "carro-01"],
     // CONTEUDO PROVISORIO — substituir pelo calendario real
     agenda: [],
     tech: [],

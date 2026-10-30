@@ -237,7 +237,12 @@ export function CameraMap({ cameras }: CameraMapProps) {
           return;
         }
 
-        const visibleCameras = cameras.filter((camera) => camera.streamUrl?.trim());
+        const visibleCameras = cameras.filter(
+          (camera) =>
+            camera.streamUrl?.trim() &&
+            Number.isFinite(camera.latitude) &&
+            Number.isFinite(camera.longitude)
+        );
 
         if (visibleCameras.length === 0) {
           setFailed(true);
@@ -245,7 +250,7 @@ export function CameraMap({ cameras }: CameraMapProps) {
         }
 
         const coordinates = visibleCameras.map(
-          (camera) => [camera.latitude, camera.longitude] as [number, number]
+          (camera) => [camera.latitude as number, camera.longitude as number] as [number, number]
         );
         const center = coordinates.reduce(
           (acc, coordinate) => [acc[0] + coordinate[0], acc[1] + coordinate[1]],
@@ -306,7 +311,10 @@ export function CameraMap({ cameras }: CameraMapProps) {
         const markers = new Map<string, LeafletMarker>();
 
         visibleCameras.forEach((camera) => {
-          const marker = L.marker([camera.latitude, camera.longitude], { icon });
+          const marker = L.marker(
+            [camera.latitude as number, camera.longitude as number],
+            { icon }
+          );
           marker.addTo(map as LeafletMap);
           marker.bindPopup(buildPopup(camera));
 
@@ -329,7 +337,10 @@ export function CameraMap({ cameras }: CameraMapProps) {
         const selectedMarker = selectedSlug ? markers.get(selectedSlug) : null;
 
         if (selectedCamera && selectedMarker) {
-          map.setView([selectedCamera.latitude, selectedCamera.longitude], 16);
+          map.setView(
+            [selectedCamera.latitude as number, selectedCamera.longitude as number],
+            16
+          );
           window.setTimeout(() => selectedMarker.openPopup(), 250);
         }
       })
