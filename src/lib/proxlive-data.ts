@@ -134,6 +134,22 @@ A lente grande-angular cobre uma faixa ampla da pista num único enquadramento.`
     longitude: -52.6069
   },
   {
+    id: "6",
+    slug: "autodromo-chegada",
+    name: "Chegada",
+    location: "Autódromo de Chapecó - SC",
+    city: "Chapecó",
+    category: "Autódromo",
+    summary: "Reta de chegada do autódromo de Chapecó, ao vivo.",
+    description: `Câmera voltada para a reta de chegada do Autódromo de Chapecó.
+
+Acompanhe ao vivo o momento em que os carros cruzam a linha.`,
+    image: "/images/cameras/autodromo-chegada.jpg",
+    streamUrl: "https://stream.proxlive.com.br/autodromo-chegada/index.m3u8",
+    latitude: -27.1082,
+    longitude: -52.6069
+  },
+  {
     id: "5",
     slug: "carro-01",
     name: "Carro 01",
@@ -329,7 +345,12 @@ O sistema conta com inteligência artificial capaz de identificar automaticament
 
 Para integrar toda a operação, foi desenvolvido um software exclusivo para o autódromo, com mapeamento da pista, monitoramento de ativos e eventos e dashboards, operado a partir de uma central de controle dedicada.`,
     heroCamera: "autodromo-panoramica",
-    cameraSlugs: ["autodromo-panoramica", "autodromo-ptz", "carro-01"],
+    cameraSlugs: [
+      "autodromo-panoramica",
+      "autodromo-ptz",
+      "autodromo-chegada",
+      "carro-01"
+    ],
     // CONTEUDO PROVISORIO — substituir pelo calendario real
     agenda: [],
     tech: [],
