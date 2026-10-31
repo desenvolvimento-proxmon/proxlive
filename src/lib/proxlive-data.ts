@@ -135,13 +135,29 @@ A lente grande-angular cobre uma faixa ampla da pista num único enquadramento.`
   },
   {
     id: "6",
+    slug: "autodromo-muro",
+    name: "Muro",
+    location: "Autódromo de Chapecó - SC",
+    city: "Chapecó",
+    category: "Autódromo",
+    summary: "Vista da reta do autódromo de Chapecó a partir do muro.",
+    description: `Câmera no muro, voltada para a reta do Autódromo de Chapecó.
+
+Enquadramento aberto, acompanhando a passagem ao longo de toda a reta.`,
+    image: "/images/cameras/autodromo-muro.jpg",
+    streamUrl: "https://stream.proxlive.com.br/autodromo-muro/index.m3u8",
+    latitude: -27.1082,
+    longitude: -52.6069
+  },
+  {
+    id: "7",
     slug: "autodromo-chegada",
     name: "Chegada",
     location: "Autódromo de Chapecó - SC",
     city: "Chapecó",
     category: "Autódromo",
-    summary: "Reta de chegada do autódromo de Chapecó, ao vivo.",
-    description: `Câmera voltada para a reta de chegada do Autódromo de Chapecó.
+    summary: "Linha de chegada do autódromo de Chapecó, ao vivo.",
+    description: `Câmera voltada para a linha de chegada do Autódromo de Chapecó.
 
 Acompanhe ao vivo o momento em que os carros cruzam a linha.`,
     image: "/images/cameras/autodromo-chegada.jpg",
@@ -349,6 +365,7 @@ Para integrar toda a operação, foi desenvolvido um software exclusivo para o a
       "autodromo-panoramica",
       "autodromo-ptz",
       "autodromo-chegada",
+      "autodromo-muro",
       "carro-01"
     ],
     // CONTEUDO PROVISORIO — substituir pelo calendario real
