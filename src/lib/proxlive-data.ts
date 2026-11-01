@@ -104,7 +104,7 @@ export const cameras: Camera[] = [
   {
     id: "3",
     slug: "autodromo-ptz",
-    name: "Autódromo PTZ",
+    name: "Autódromo 1",
     location: "Autódromo de Chapecó - SC",
     city: "Chapecó",
     category: "Autódromo",
@@ -136,14 +136,14 @@ A lente grande-angular cobre uma faixa ampla da pista num único enquadramento.`
   {
     id: "6",
     slug: "autodromo-muro",
-    name: "Muro",
+    name: "Passagem",
     location: "Autódromo de Chapecó - SC",
     city: "Chapecó",
     category: "Autódromo",
-    summary: "Vista da reta do autódromo de Chapecó a partir do muro.",
-    description: `Câmera no muro, voltada para a reta do Autódromo de Chapecó.
+    summary: "Passagem na reta do autódromo de Chapecó, ao vivo.",
+    description: `Câmera voltada para a reta do Autódromo de Chapecó.
 
-Enquadramento aberto, acompanhando a passagem ao longo de toda a reta.`,
+Enquadramento aberto, acompanhando a passagem dos carros ao longo de toda a reta.`,
     image: "/images/cameras/autodromo-muro.jpg",
     streamUrl: "https://stream.proxlive.com.br/autodromo-muro/index.m3u8",
     latitude: -27.1082,
@@ -168,7 +168,7 @@ Acompanhe ao vivo o momento em que os carros cruzam a linha.`,
   {
     id: "5",
     slug: "carro-01",
-    name: "Carro 01",
+    name: "Felipe Tozzo - Truck 57",
     location: "Autódromo de Chapecó - SC",
     city: "Chapecó",
     category: "Autódromo",
