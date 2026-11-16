@@ -57,10 +57,11 @@ export const metadata: Metadata = {
     images: [
       {
         url: siteConfig.ogImage,
-        // Dimensão real de cam1.png. Trocar por uma arte 1200x630 dedicada
-        // melhora o preview no WhatsApp e no Facebook.
-        width: 800,
-        height: 600,
+        // Dimensão real da miniatura da panorâmica, que é a imagem servida
+        // hoje. Trocar por uma arte 1200x630 dedicada melhora o preview no
+        // WhatsApp e no Facebook — a de agora é pesada demais para o cartão.
+        width: 3680,
+        height: 1656,
         alt: "Câmeras ao vivo no PROXLIVE"
       }
     ]
@@ -118,6 +119,8 @@ export default function RootLayout({
         <link rel="preconnect" href="https://cdn.jsdelivr.net" crossOrigin="" />
         <link rel="preconnect" href="https://unpkg.com" crossOrigin="" />
         <link rel="dns-prefetch" href="https://stream.proxlive.com.br" />
+        {/* Origem das cameras da fronteira, servidas fora da nossa VPS. */}
+        <link rel="dns-prefetch" href="https://video04.logicahost.com.br" />
         <link rel="dns-prefetch" href="https://server.arcgisonline.com" />
       </head>
       <body>

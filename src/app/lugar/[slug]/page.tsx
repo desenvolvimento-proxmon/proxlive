@@ -108,10 +108,15 @@ export default async function PlacePage({ params }: PlacePageProps) {
           </Section>
         ) : null}
 
+        {/*
+          O titulo padrao fala do que a Proxmon executou. Lugar que so reexibe
+          sinal de terceiro traz o seu proprio titulo, para a pagina nao
+          reivindicar um trabalho que nao e nosso.
+        */}
         <Section
           id="projeto"
-          eyebrow="O projeto"
-          title="O que a Proxmon executou nesse projeto"
+          eyebrow={place.aboutEyebrow ?? "O projeto"}
+          title={place.aboutTitle ?? "O que a Proxmon executou nesse projeto"}
           className="pt-10"
         >
           <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_320px]">

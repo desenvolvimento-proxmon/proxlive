@@ -101,6 +101,55 @@ export const heroSlides: HeroSlide[] = [
 
 
 export const cameras: Camera[] = [
+  /*
+   * As duas cameras da fronteira vem de servidor de terceiro
+   * (video04.logicahost.com.br) e nao passam pela nossa VPS: o navegador de
+   * quem assiste busca o video direto na origem. Por isso nao existe miniatura
+   * em /thumbs para elas, e a capa e um quadro congelado guardado no repo.
+   *
+   * Apontar sempre para o playlist mestre: o chunklist carrega um id de sessao
+   * que muda quando o encoder reinicia e quebraria o player.
+   */
+  {
+    id: "1",
+    slug: "ponte-amizade-brasil",
+    name: "Ponte da Amizade - Brasil",
+    location: "BR-277, Foz do Iguaçu - PR",
+    city: "Foz do Iguaçu",
+    category: "Trânsito",
+    summary:
+      "Veja ao vivo o trânsito na Ponte da Amizade no sentido Paraguai, saindo de Foz do Iguaçu.",
+    description: `A Ponte Internacional da Amizade liga Foz do Iguaçu, no Paraná, a Ciudad del Este, no Paraguai, por cima do Rio Paraná. É uma das travessias mais movimentadas do país.
+
+A câmera cobre o tabuleiro da ponte no sentido Paraguai, com o arco de concreto em primeiro plano. Dá para ver fila, caminhão parado e o ritmo da travessia em tempo real.
+
+O movimento muda muito ao longo do dia e costuma travar em horário de pico, feriado e fim de semana. Olhe antes de sair de casa.`,
+    image: "/images/cameras/ponte-amizade-brasil.jpg",
+    streamUrl:
+      "https://video04.logicahost.com.br/portovelhomamore/fozpontedaamizadesentidoparaguai.stream/playlist.m3u8",
+    latitude: -25.509444,
+    longitude: -54.598314
+  },
+  {
+    id: "2",
+    slug: "ponte-amizade-paraguai",
+    name: "Ponte da Amizade - Acesso Paraguai",
+    location: "Ciudad del Este, Paraguai",
+    city: "Ciudad del Este",
+    category: "Trânsito",
+    summary:
+      "Acompanhe ao vivo o acesso à Ponte da Amizade pelo centro de Ciudad del Este, no sentido Brasil.",
+    description: `Câmera no centro de Ciudad del Este, voltada para a avenida que leva à Ponte Internacional da Amizade no sentido Brasil.
+
+O enquadramento pega o comércio da região e o fluxo de carros, motos e pedestres que seguem em direção à fronteira — é onde a fila da travessia costuma começar a se formar, antes de chegar na ponte.
+
+Vale olhar junto com a câmera da ponte: as duas somadas mostram a travessia inteira.`,
+    image: "/images/cameras/ponte-amizade-paraguai.jpg",
+    streamUrl:
+      "https://video04.logicahost.com.br/portovelhomamore/fozpontedaamizadesentidobrasil.stream/playlist.m3u8",
+    latitude: -25.509334,
+    longitude: -54.606988
+  },
   {
     id: "3",
     slug: "autodromo-ptz",
@@ -334,6 +383,14 @@ export type Place = {
    */
   heroImage?: string;
   cameraSlugs: string[];
+  /**
+   * Titulo da secao de texto do hub. O padrao fala do que a Proxmon executou,
+   * que so vale para lugar com projeto nosso instalado. Lugar que apenas
+   * reexibe sinal de terceiro precisa de outro titulo, senao a pagina reivindica
+   * um trabalho que nao e nosso.
+   */
+  aboutEyebrow?: string;
+  aboutTitle?: string;
   agenda: AgendaItem[];
   tech: TechItem[];
   /** Proximo evento no lugar. Provisorio ate termos a agenda completa. */
@@ -375,20 +432,27 @@ Para integrar toda a operação, foi desenvolvido um software exclusivo para o a
     nextEvent: { date: "01/11", title: "Próxima etapa" },
   },
   {
-    slug: "cataratas",
-    name: "Cataratas do Iguaçu",
-    shortName: "Cataratas",
+    slug: "foz-do-iguacu",
+    name: "Foz do Iguaçu",
+    shortName: "Foz",
     location: "Foz do Iguaçu - PR",
     city: "Foz do Iguaçu",
     state: "PR",
-    tagline: "Em breve, ao vivo.",
+    tagline: "A travessia da fronteira, ao vivo.",
     tint: "#0d7f8c",
     cover: "/images/places/cataratas.jpg",
-    // CONTEUDO PROVISORIO
-    about: `Estamos preparando a transmissão ao vivo das Cataratas do Iguaçu.
+    heroCamera: "ponte-amizade-brasil",
+    heroImage: "/images/places/foz-hero.jpg",
+    aboutEyebrow: "O lugar",
+    aboutTitle: "A fronteira mais movimentada do país",
+    about: `A Ponte Internacional da Amizade liga Foz do Iguaçu, no Paraná, a Ciudad del Este, no Paraguai, por cima do Rio Paraná. Por ela passam todos os dias turistas, sacoleiros, caminhoneiros e quem mora de um lado e trabalha do outro.
 
-Em breve você vai acompanhar em tempo real, de graça e sem cadastro.`,
-    cameraSlugs: [],
+O movimento muda muito ao longo do dia. Em horário de pico, feriado e fim de semana a travessia trava, e a fila que se forma no centro de Ciudad del Este pode levar mais de uma hora para andar.
+
+As duas câmeras desta página cobrem os dois trechos: o tabuleiro da ponte no sentido Paraguai e a avenida de acesso do lado paraguaio, no sentido Brasil. Juntas, mostram a travessia inteira em tempo real, de graça e sem cadastro.
+
+As imagens de Foz do Iguaçu são transmitidas por terceiros, direto da origem, e não fazem parte da infraestrutura instalada pela Proxmon.`,
+    cameraSlugs: ["ponte-amizade-brasil", "ponte-amizade-paraguai"],
     agenda: [],
     tech: []
   }
