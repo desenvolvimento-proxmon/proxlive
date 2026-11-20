@@ -7,6 +7,7 @@ import { ArrowUpRight, MapPin } from "lucide-react";
 import type { Camera } from "@/lib/proxlive-data";
 import { PREVIEW_HLS_SETTINGS } from "./hls-client";
 import { useHlsPlayer } from "./useHlsPlayer";
+import { useSinalNoAr } from "./useSinalNoAr";
 
 type CameraCardProps = {
   camera: Camera;
@@ -19,7 +20,19 @@ const HOVER_DELAY = 260;
 export function CameraCard({ camera, priority = false }: CameraCardProps) {
   const [previewing, setPreviewing] = useState(false);
   const timer = useRef<number | undefined>(undefined);
-  const live = Boolean(camera.streamUrl?.trim());
+  const configurada = Boolean(camera.streamUrl?.trim());
+  const { noAr } = useSinalNoAr(
+    camera.streamUrl,
+    configurada && !!camera.intermitente
+  );
+
+  /*
+   * Camera normal fica no ar o tempo todo, entao ter endereco ja basta. A
+   * intermitente so acende o selo quando a consulta confirma — senao o card
+   * anunciaria "ao vivo" num drone que nem decolou.
+   */
+  const live = camera.intermitente ? noAr === true : configurada;
+  const verificando = camera.intermitente && noAr === null;
 
   const { videoRef, status } = useHlsPlayer({
     streamUrl: camera.streamUrl,
@@ -61,8 +74,10 @@ export function CameraCard({ camera, priority = false }: CameraCardProps) {
             fill
             priority={priority}
             sizes="(min-width: 768px) 50vw, 100vw"
-            className={`object-cover transition-transform duration-[1100ms] ease-out-expo ${
-              live ? "group-hover:scale-[1.05]" : "opacity-50 saturate-0"
+            className={`object-cover transition-[transform,opacity,filter] duration-[1100ms] ease-out-expo ${
+              live || verificando
+                ? "group-hover:scale-[1.05]"
+                : "opacity-50 saturate-0"
             }`}
           />
 
@@ -95,6 +110,14 @@ export function CameraCard({ camera, priority = false }: CameraCardProps) {
               <span className="inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.12em] text-white [text-shadow:0_0_4px_rgba(0,0,0,0.95),0_1px_2px_rgba(0,0,0,1),0_-1px_2px_rgba(0,0,0,0.75)]">
                 <span className="h-[7px] w-[7px] animate-live-pulse rounded-full bg-live shadow-[0_0_7px_rgba(255,59,48,0.95)]" />
                 Ao vivo
+              </span>
+            ) : verificando ? null : camera.intermitente ? (
+              /*
+                "Em breve" aqui seria mentira: a camera existe e funciona, so
+                nao esta transmitindo agora.
+              */
+              <span className="inline-flex items-center text-[11px] font-semibold uppercase tracking-[0.12em] text-carbon-200 [text-shadow:0_0_4px_rgba(0,0,0,0.95),0_1px_2px_rgba(0,0,0,1)]">
+                Fora do ar
               </span>
             ) : (
               <span className="inline-flex items-center text-[11px] font-semibold uppercase tracking-[0.12em] text-carbon-200 [text-shadow:0_0_4px_rgba(0,0,0,0.95),0_1px_2px_rgba(0,0,0,1)]">

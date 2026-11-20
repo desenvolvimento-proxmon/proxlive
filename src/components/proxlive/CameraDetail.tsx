@@ -6,6 +6,7 @@ import { CameraCard } from "./CameraCard";
 import { CameraPlayer } from "./CameraPlayer";
 import { Reveal } from "./Reveal";
 import { Section } from "./Section";
+import { SeloSinal } from "./SeloSinal";
 import { ShareButton } from "./ShareButton";
 
 type CameraDetailProps = {
@@ -17,7 +18,6 @@ export function CameraDetail({
   camera,
   cameras
 }: CameraDetailProps) {
-  const live = Boolean(camera.streamUrl?.trim());
   // Câmera que se move não está no mapa: o botão levaria a lugar nenhum.
   const noMapa =
     Number.isFinite(camera.latitude) && Number.isFinite(camera.longitude);
@@ -59,12 +59,7 @@ export function CameraDetail({
 
         <div className="flex flex-col gap-5 pb-8 lg:flex-row lg:items-end lg:justify-between">
           <div className="min-w-0">
-            <span className="eyebrow flex items-center gap-2.5">
-              {live ? (
-                <span className="h-1.5 w-1.5 animate-live-pulse rounded-full bg-live" />
-              ) : null}
-              {live ? "Ao vivo agora" : "Em breve"}
-            </span>
+            <SeloSinal camera={camera} />
             <h1 className="mt-4 text-display text-balance font-display text-white">
               {camera.name}
             </h1>

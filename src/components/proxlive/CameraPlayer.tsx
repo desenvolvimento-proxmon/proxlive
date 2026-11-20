@@ -7,6 +7,7 @@ import type { Camera } from "@/lib/proxlive-data";
 import { track } from "@/lib/analytics";
 import { isHlsUrl } from "./hls-client";
 import { useHlsPlayer } from "./useHlsPlayer";
+import { useSinalNoAr } from "./useSinalNoAr";
 
 type CameraPlayerProps = {
   camera: Camera;
@@ -23,8 +24,25 @@ export function CameraPlayer({ camera, className = "" }: CameraPlayerProps) {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const streamUrl = camera.streamUrl?.trim();
 
-  const { videoRef, status, retry } = useHlsPlayer({
+  const { noAr, consultarDeNovo } = useSinalNoAr(
     streamUrl,
+    Boolean(camera.intermitente && streamUrl)
+  );
+
+  /*
+   * Camera intermitente so entra no player depois de a consulta confirmar que
+   * ha sinal. Sem isso o hls.js fica tentando reconectar contra um caminho
+   * vazio e a pagina gira "Reconectando" para sempre, que e pior do que dizer
+   * logo que o equipamento nao esta transmitindo.
+   */
+  const urlParaTocar = camera.intermitente
+    ? noAr === true
+      ? streamUrl
+      : undefined
+    : streamUrl;
+
+  const { videoRef, status, retry } = useHlsPlayer({
+    streamUrl: urlParaTocar,
     onPlaying: () => track("camera_play", { camera: camera.slug }),
     onError: () => track("camera_error", { camera: camera.slug }),
     onReconnect: (attempt) =>
@@ -77,6 +95,42 @@ export function CameraPlayer({ camera, className = "" }: CameraPlayerProps) {
           <p className="max-w-sm text-sm text-carbon-400">
             Esta câmera ainda está sendo instalada.
           </p>
+        </div>
+      </div>
+    );
+  }
+
+  /*
+   * Camera intermitente com sinal confirmado fora do ar. Mostra o estado de
+   * uma vez, em vez de abrir o player para ele girar sem nunca completar.
+   */
+  if (camera.intermitente && noAr === false) {
+    return (
+      <div
+        className={`relative h-full w-full overflow-hidden bg-carbon-950 ${className}`}
+      >
+        <Image
+          src={camera.image}
+          alt={`Imagem da câmera ${camera.name}`}
+          fill
+          priority
+          sizes="(min-width: 1024px) 70vw, 100vw"
+          className="object-cover opacity-50"
+        />
+        <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 bg-carbon-950/70 p-6 text-center">
+          <span className="eyebrow text-carbon-300">Fora do ar</span>
+          <p className="max-w-sm text-sm leading-relaxed text-carbon-400">
+            Esta câmera transmite durante os voos. Agora o equipamento não está
+            no ar.
+          </p>
+          <button
+            type="button"
+            onClick={consultarDeNovo}
+            className="btn btn-sm btn-solid"
+          >
+            <RotateCw className="h-3.5 w-3.5" />
+            Verificar de novo
+          </button>
         </div>
       </div>
     );

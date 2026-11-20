@@ -43,6 +43,16 @@ export type Camera = {
   image: string;
   streamUrl?: string;
   /**
+   * Câmera que transmite só de vez em quando — drone, por exemplo. O card
+   * consulta a playlist antes de acender o selo, em vez de dizer "ao vivo" nos
+   * dias em que o equipamento nem saiu do chão.
+   *
+   * Só vale para caminho alimentado por publicação. Num caminho sob demanda a
+   * consulta ligaria a câmera a cada visita — na veicular, isso gastaria o chip
+   * 4G de quem nem clicou.
+   */
+  intermitente?: boolean;
+  /**
    * Ausentes em câmera que se move — veicular, por exemplo. Sem coordenada a
    * câmera fica fora do mapa e sem `geo` nos dados estruturados, em vez de
    * ganhar um pino parado onde ela não está.
@@ -231,6 +241,29 @@ O sinal só é pedido ao veículo enquanto alguém está assistindo.`,
     streamUrl: "https://stream.proxlive.com.br/carro-01/index.m3u8"
     // Sem latitude/longitude de propósito: a câmera se move, então fica fora
     // do mapa em vez de ganhar um pino parado onde ela não está.
+  },
+  {
+    id: "8",
+    slug: "drone",
+    name: "Autódromo Drone",
+    location: "Autódromo de Chapecó - SC",
+    city: "Chapecó",
+    category: "Drone",
+    summary: "Imagem aérea ao vivo transmitida por drone, durante os voos.",
+    description: `Transmissão aérea ao vivo enviada por drone.
+
+O sinal chega ao PROXLIVE em tempo real, direto do equipamento em voo. Como depende de o drone estar no ar, esta câmera transmite durante os eventos e fica fora do ar no resto do tempo.`,
+    /*
+     * Capa neutra, sem texto: enquanto nao houver um quadro de voo real
+     * guardado aqui, qualquer arte escrita brigaria com o selo. A miniatura de
+     * /thumbs nao serve — ela so existe enquanto o drone publica, e devolve 404
+     * justamente nos dias em que a capa precisa aparecer.
+     */
+    image: "/images/cameras/drone.jpg",
+    streamUrl: "https://stream.proxlive.com.br/drone/index.m3u8",
+    intermitente: true,
+    latitude: -27.1082,
+    longitude: -52.6069
   }
 ];
 
@@ -423,7 +456,9 @@ Para integrar toda a operação, foi desenvolvido um software exclusivo para o a
       "autodromo-ptz",
       "autodromo-chegada",
       "autodromo-muro",
-      "carro-01"
+      "carro-01",
+      // Por ultimo: e a unica que fica fora do ar entre um evento e outro.
+      "drone"
     ],
     // CONTEUDO PROVISORIO — substituir pelo calendario real
     agenda: [],
